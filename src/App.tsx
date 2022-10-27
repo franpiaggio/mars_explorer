@@ -7,7 +7,15 @@ import Home from "./pages/Home"
 import NotFound from "./pages/NotFound"
 import About from "./pages/About"
 
-const queryClient = new QueryClient()
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: true,
+      staleTime: 6000 * 5,
+      retry: 1,
+    },
+  },
+})
 
 function App() {
   return (

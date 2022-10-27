@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom"
 import { Heading } from "@chakra-ui/react"
-import { Layout, Header } from "@/components"
+import { Layout, Header } from "@/layout"
 function About() {
   return (
     <Layout>

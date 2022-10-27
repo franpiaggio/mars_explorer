@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom"
-import { Center, Heading, Box } from "@chakra-ui/react"
-import { Layout } from "@/components"
+import { Heading, Box } from "@chakra-ui/react"
+import { Layout } from "@/layout"
 function NotFound() {
   return (
     <Layout>

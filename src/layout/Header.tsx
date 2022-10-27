@@ -5,9 +5,13 @@ import {
   Spacer,
   ButtonGroup,
   Button,
+  Spinner,
   useColorMode,
 } from "@chakra-ui/react"
-function Header() {
+interface props {
+  isRefetching?: boolean
+}
+function Header({ isRefetching }: props) {
   const { colorMode, toggleColorMode } = useColorMode()
   return (
     <Flex minWidth="max-content" alignItems="center" gap="2">
@@ -15,6 +19,7 @@ function Header() {
         <Heading as="h1" size="md">
           NASA ROVER
         </Heading>
+        {isRefetching && <Spinner />}
       </Box>
       <Spacer />
       <ButtonGroup gap="2">
