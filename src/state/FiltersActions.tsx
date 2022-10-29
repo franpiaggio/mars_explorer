@@ -11,16 +11,16 @@ function filtersActions(dispatch: Dispatch) {
         },
       })
     },
-    setRover: (roverName: string, rovers: Rover[]) => {
+    setRover: (roverId: number, rovers: Rover[]) => {
       dispatch({
         type: ACTIONS.SET_ROVER,
         payload: {
-          roverName: roverName,
+          roverId: roverId,
           rovers: rovers,
         },
       })
     },
-    setDefaultCamera: (camera: Camera) => {
+    setDefaultCamera: (camera: Camera | null) => {
       dispatch({
         type: ACTIONS.SET_DEFAULT_CAMERA,
         payload: {
@@ -28,12 +28,18 @@ function filtersActions(dispatch: Dispatch) {
         },
       })
     },
-    setCamera: (cameraName: string) => {
+    setCamera: (cameraId: number) => {
       dispatch({
         type: ACTIONS.SET_CAMERA,
         payload: {
-          cameraName: cameraName,
+          cameraId: cameraId,
         },
+      })
+    },
+    setNextPage: () => {
+      dispatch({
+        type: ACTIONS.SET_NEXT_PAGE,
+        payload: {},
       })
     },
   }

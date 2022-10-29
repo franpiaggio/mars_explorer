@@ -1,28 +1,33 @@
-import { useMemo } from "react"
+import { useMemo, useContext } from "react"
 import { fetchRoverData } from "@/queries/api"
 import { useQuery } from "@tanstack/react-query"
-import type { Rover } from "@/setup/types"
-function useRoverPhotos(
-  queryEnabled: boolean,
-  selectedRover: Rover | null,
-  selectedCamera: string
-) {
-  const queryRover = useMemo(
-    () => (selectedRover ? selectedRover.name : null),
-    [selectedRover]
+import { FiltersContext } from "@/state/FiltersContext"
+
+function useRoverPhotos() {
+  const { state } = useContext(FiltersContext)
+  const selectedRoverName: string | null = useMemo(
+    () => (state?.rover ? state.rover.name.toLowerCase() : null),
+    [state?.rover?.id]
   )
+  const selectedCameraName: string | null = useMemo(
+    () => (state?.camera ? state.camera.name.toLowerCase() : null),
+    [state?.camera?.id]
+  )
+  const page = useMemo(() => state?.page || 1, [state?.page])
   const {
     data: roverData,
+    isLoading,
     isError,
     isRefetching,
   } = useQuery(
-    ["photos", queryRover, selectedCamera],
-    () => fetchRoverData(selectedRover, selectedCamera),
+    ["photos", selectedRoverName, selectedCameraName, page],
+    () => fetchRoverData(selectedRoverName, selectedCameraName, page),
     {
-      enabled: queryEnabled,
+      enabled: !!selectedRoverName,
+      keepPreviousData: true,
     }
   )
-  return { roverData, isError, isRefetching }
+  return { roverData, isError, isRefetching, isLoading }
 }
 
 export { useRoverPhotos }

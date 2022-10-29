@@ -15,21 +15,30 @@ type Camera = {
   rover_id: number
   full_name: string
 }
-
-type Filters = {
-  rover: any
-  camera: any
+type Photo = {
+  id: number
+  sol: number
+  camera: Camera[]
+  img_src: string
+  earth_date: string
+  rover: Rover[]
 }
-
+type Filters = {
+  rover?: Rover | null
+  camera?: Camera | null
+  page?: number | null
+}
 interface FilterAction {
   type: string
   payload: {
     rovers?: Rover[]
     rover?: Rover
-    camera?: Camera
-    roverName?: string
-    cameraName?: string
+    camera?: Camera | null
+    roverId?: number
+    cameraId?: number
+    typeDay?: string
+    page?: number
   }
 }
 
-export type { Rover, Camera, Filters, FilterAction }
+export type { Rover, Camera, Photo, Filters, FilterAction }

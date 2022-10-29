@@ -1,4 +1,4 @@
-import { useContext } from "react"
+import { useContext, useMemo } from "react"
 import { Select } from "@chakra-ui/react"
 import { useRovers } from "@/queries/useRovers"
 import { FiltersContext } from "@/state/FiltersContext"
@@ -8,18 +8,19 @@ function SelectRovers() {
   const { state, actions } = useContext(FiltersContext)
   const onChangeRover = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const value = e.target.value
-    actions?.setRover(value, listRovers.rovers)
+    actions.setRover(parseInt(value), listRovers.rovers)
   }
+  const selectedRover = useMemo(() => state.rover, [state.rover?.id])
   return (
     <Select
       disabled={!roversLoaded}
       onChange={onChangeRover}
-      defaultValue={state?.rover ? state.rover.name : undefined}
+      value={selectedRover ? selectedRover.id : undefined}
       placeholder={!roversLoaded ? "Loading..." : undefined}
     >
       {roversLoaded &&
         listRovers.rovers.map((rover: Rover) => (
-          <option key={rover.id} value={rover.name}>
+          <option key={rover.id} value={rover.id}>
             {rover.name}
           </option>
         ))}

@@ -11,8 +11,8 @@ import NotFound from "./pages/NotFound"
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      refetchOnWindowFocus: true,
-      retry: 1,
+      refetchOnWindowFocus: false,
+      retry: 2,
     },
   },
 })

@@ -1,26 +1,22 @@
-import { createContext, useReducer } from "react"
+import { createContext, useReducer, useMemo } from "react"
 import { filtersReducer } from "./FiltersReducer"
 import { filtersActions } from "./FiltersActions"
-import type { Filters, Rover, Camera } from "@/setup/types"
-
-interface FilterActions {
-  setDefaultRover: (rover: Rover) => void
-  setRover: (roverName: string, rovers: Rover[]) => void
-  setDefaultCamera: (camera: Camera) => void
-  setCamera: (camera: string) => void
-}
+import type { Filters } from "@/setup/types"
 
 interface FiltersContext {
-  state: Filters | null
-  actions: FilterActions | null
+  state: Filters
+  actions: any
 }
-const initialContext = {
-  state: null,
-  actions: null,
-}
+
 const initialState: Filters = {
   rover: null,
   camera: null,
+  page: 1,
+}
+
+const initialContext = {
+  state: initialState,
+  actions: filtersActions,
 }
 
 interface Props {
@@ -30,7 +26,7 @@ interface Props {
 const FiltersContext = createContext<FiltersContext>(initialContext)
 function FiltersContextProvider({ children }: Props) {
   const [state, dispatch] = useReducer(filtersReducer, initialState)
-  const actions = filtersActions(dispatch)
+  const actions = useMemo(() => filtersActions(dispatch), [])
   return (
     <FiltersContext.Provider value={{ state, actions }}>
       {children}
