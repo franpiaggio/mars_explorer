@@ -6,6 +6,7 @@ function About() {
     <Layout>
       <Header />
       <Heading>About Fran</Heading>
+      <Link to={"/"}> Volver </Link>
     </Layout>
   )
 }

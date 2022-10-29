@@ -8,16 +8,17 @@ import {
   Spinner,
   useColorMode,
 } from "@chakra-ui/react"
-interface props {
+interface Props {
   isRefetching?: boolean
 }
-function Header({ isRefetching }: props) {
+function Header({ isRefetching }: Props) {
+  console.log("HEADER")
   const { colorMode, toggleColorMode } = useColorMode()
   return (
     <Flex minWidth="max-content" alignItems="center" gap="2">
       <Box p="2">
         <Heading as="h1" size="md">
-          NASA ROVER
+          MARS ROVERS
         </Heading>
         {isRefetching && <Spinner />}
       </Box>

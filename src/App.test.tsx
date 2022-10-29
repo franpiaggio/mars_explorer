@@ -23,9 +23,7 @@ function RenderMockApp({ path }: props) {
   return (
     <MemoryRouter initialEntries={[path]}>
       <QueryClientProvider client={mockClient}>
-        <ChakraProvider theme={theme}>
-          <App />
-        </ChakraProvider>
+        <App />
       </QueryClientProvider>
     </MemoryRouter>
   )
@@ -40,7 +38,7 @@ describe("App routing", () => {
   })
   it("Renders home", () => {
     render(<RenderMockApp path="/" />)
-    expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("NASA ROVER")
+    expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("MARS ROVERS")
   })
   it("Renders not found if path is invalid", () => {
     render(<RenderMockApp path="/aliens" />)

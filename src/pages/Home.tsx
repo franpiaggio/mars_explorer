@@ -1,17 +1,15 @@
-import { useQuery } from "@tanstack/react-query"
 import { Header, Layout } from "@/layout"
-import { RoversData, Filters } from "@/components"
-import fetchRoverData from "@/api"
+import { Filters, PhotoGrid } from "@/components"
+import { Link } from "react-router-dom"
+
 function Home() {
-  const rover = "spirit"
-  const { data, isError, isRefetching } = useQuery(["photos"], () =>
-    fetchRoverData(rover)
-  )
+  console.log("HOME")
   return (
     <Layout>
-      <Header isRefetching={isRefetching} />
+      <Header />
       <Filters />
-      <RoversData data={data} isError={isError} />
+      <PhotoGrid />
+      <Link to={"/about"}> Ir About </Link>
     </Layout>
   )
 }

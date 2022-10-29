@@ -1,10 +1,8 @@
 import { SimpleGrid } from "@chakra-ui/react"
-import RoverPhoto from "./RoverPhoto/RoverPhoto"
-interface props {
-  photos: any
-}
+import RoverPhoto from "./RoverPhoto"
 
-function ListPhotos({ photos }: props) {
+function PhotoGrid() {
+  const photos: any = []
   return (
     <SimpleGrid columns={5} spacing={10}>
       {photos.map((photo: any) => (
@@ -14,4 +12,4 @@ function ListPhotos({ photos }: props) {
   )
 }
 
-export default ListPhotos
+export default PhotoGrid
