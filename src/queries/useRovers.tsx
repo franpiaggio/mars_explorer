@@ -4,17 +4,17 @@ import { useQuery } from "@tanstack/react-query"
 import { FiltersContext } from "@/state/FiltersContext"
 function useRovers() {
   const { actions } = useContext(FiltersContext)
-  const {
-    data: listRovers,
-    isFetched: roversLoaded,
-    isSuccess,
-  } = useQuery(["rovers"], fetchRovers, { staleTime: Infinity })
+  const res = useQuery(["rovers"], fetchRovers, { staleTime: Infinity })
+  const listRovers = res.data
+  const roversLoaded = res.isFetched
+
   useEffect(() => {
-    if (isSuccess && actions) {
+    if (res.isSuccess && actions) {
       actions.setDefaultRover(listRovers.rovers[listRovers.rovers.length - 1])
       actions.setDefaultCamera(null)
     }
   }, [roversLoaded])
-  return { listRovers, roversLoaded }
+
+  return { ...res, listRovers, roversLoaded }
 }
 export { useRovers }

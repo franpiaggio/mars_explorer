@@ -1,7 +1,8 @@
 import { Image, Box } from "@chakra-ui/react"
-function RoverPhoto({ src }: any) {
+function RoverPhoto({ id, src }: any) {
   return (
     <Box>
+      <p>Id: {id}</p>
       <Image src={src} />
     </Box>
   )

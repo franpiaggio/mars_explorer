@@ -1,9 +1,10 @@
 import { useContext, useMemo } from "react"
 import { Select } from "@chakra-ui/react"
-import { useRovers } from "@/queries/useRovers"
+import { useRovers, useRoverPhotos } from "@/queries/"
 import { FiltersContext } from "@/state/FiltersContext"
 function SelectCamera() {
   const { roversLoaded } = useRovers()
+  const { isRefetching } = useRoverPhotos()
   const { state, actions } = useContext(FiltersContext)
   const selectedRover = useMemo(() => state.rover, [state.rover?.id])
   const selectedCamera = useMemo(() => state?.camera, [state.camera?.id])
@@ -18,7 +19,7 @@ function SelectCamera() {
   return (
     <Select
       onChange={onChangeCamera}
-      disabled={!roversLoaded}
+      disabled={!roversLoaded || isRefetching}
       defaultValue={selectedCamera ? selectedCamera.name : undefined}
       placeholder={!selectedRover && !roversLoaded ? "Loading..." : undefined}
     >

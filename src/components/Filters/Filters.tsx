@@ -5,7 +5,7 @@ function Filters() {
     <>
       <SelectRover />
       <SelectCamera />
-      <SelectDay />
+      {/* <SelectDay /> */}
     </>
   )
 }
