@@ -3,20 +3,22 @@ import { Rover, Camera, FilterAction } from "@/setup/types"
 type Dispatch = (action: FilterAction) => void
 function filtersActions(dispatch: Dispatch) {
   return {
-    setDefaultRover: (rover: Rover) => {
+    setDefaultRover: (rover: Rover, day: string) => {
       dispatch({
         type: ACTIONS.SET_DEFAULT_ROVER,
         payload: {
           rover: rover,
+          day: day,
         },
       })
     },
-    setRover: (roverId: number, rovers: Rover[]) => {
+    setRover: (roverId: number, rovers: Rover[], dayType: string) => {
       dispatch({
         type: ACTIONS.SET_ROVER,
         payload: {
           roverId: roverId,
           rovers: rovers,
+          dayType: dayType,
         },
       })
     },
@@ -50,11 +52,12 @@ function filtersActions(dispatch: Dispatch) {
         },
       })
     },
-    setDayType: (dayType: string) => {
+    setDayType: (dayType: string, day: string) => {
       dispatch({
         type: ACTIONS.SET_DAY_TYPE,
         payload: {
           dayType: dayType,
+          day: day,
         },
       })
     },

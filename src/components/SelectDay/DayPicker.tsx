@@ -1,4 +1,4 @@
-import React, { useContext, useMemo, useEffect, useState } from "react"
+import { useContext, useMemo, useEffect, useState } from "react"
 import {
   NumberInput,
   NumberInputField,
@@ -6,7 +6,6 @@ import {
   NumberIncrementStepper,
   NumberDecrementStepper,
   Box,
-  Input,
 } from "@chakra-ui/react"
 import { SingleDatepicker } from "chakra-dayzed-datepicker"
 import { useDebounce } from "@/hooks/"
@@ -14,18 +13,26 @@ import { useRovers } from "@/queries/useRovers"
 import { FiltersContext } from "@/state/FiltersContext"
 import { useFormatedDate } from "@/hooks"
 import { useRoverPhotos } from "@/queries"
+import { DayType } from "@/components/SelectDay/DayType"
+import { formatToAllowedDate } from "@/hooks/useFormatedDate"
 
 function DayPicker() {
+  const { state, actions } = useContext(FiltersContext)
+  const selectedRover = useMemo(() => state.rover, [state.rover?.id])
   const [inputDate, setInputDate] = useState("1")
   const debouncedValue = useDebounce(inputDate, 500)
   const { roversLoaded } = useRovers()
   const { isRefetching } = useRoverPhotos()
-  const { state, actions } = useContext(FiltersContext)
-  const selectedRover = useMemo(() => state.rover, [state.rover?.id])
   const dayType = useMemo(() => state.dayType, [state.dayType])
-  const [earthDay, setEarthDay] = useState(
-    selectedRover ? new Date(Date.parse(selectedRover?.max_date)) : new Date()
-  )
+  const earthDay = useMemo(() => {
+    if (state.day && dayType === DayType.EARTH) {
+      const dateWithPickerFormat = formatToAllowedDate(state.day)
+      console.log(dateWithPickerFormat)
+      const selectedDay = new Date(dateWithPickerFormat + "T00:00:00")
+      return selectedDay
+    }
+    return undefined
+  }, [state.day])
   const onChangeDay = (value: string) => {
     setInputDate(value)
   }
@@ -34,22 +41,18 @@ function DayPicker() {
   }
 
   useEffect(() => {
-    actions.setDay(inputDate)
-  }, [debouncedValue])
-
-  useEffect(() => {
-    if (dayType === "earth_day") {
-      if (selectedRover) {
-        const formated = new Date(Date.parse(selectedRover?.max_date))
-        setEarthDay(formated)
-        actions.setDay(useFormatedDate(formated))
-      }
-    } else {
-      setInputDate("1")
-    }
+    setInputDate(String(selectedRover?.max_sol))
   }, [selectedRover])
 
-  if (dayType === "sol") {
+  useEffect(() => {}, [])
+
+  useEffect(() => {
+    if (dayType === DayType.SOL) {
+      actions.setDay(inputDate)
+    }
+  }, [debouncedValue])
+
+  if (dayType === DayType.SOL) {
     return (
       <Box>
         <h2>Day. Max: {selectedRover?.max_sol}</h2>
@@ -73,6 +76,7 @@ function DayPicker() {
     <Box>
       <h2>Day Max: {selectedRover?.max_date}</h2>
       <SingleDatepicker
+        disabled={!selectedRover || isRefetching}
         name="date-input"
         date={earthDay}
         onDateChange={onChangeEarthDay}

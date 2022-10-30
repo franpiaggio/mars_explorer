@@ -2,15 +2,27 @@ import { useContext, useMemo } from "react"
 import { Flex, Box, Select } from "@chakra-ui/react"
 import { FiltersContext } from "@/state/FiltersContext"
 import { useRoverPhotos } from "@/queries"
-import { DayPicker } from "./DayPicker"
+import { DayPicker } from "@/components/SelectDay/DayPicker"
+import { useFormatedDate } from "@/hooks"
+import { DayType } from "@/components/SelectDay/DayType"
+
 function SelectDay() {
   const { state, actions } = useContext(FiltersContext)
   const { isRefetching } = useRoverPhotos()
   const selectedRover = useMemo(() => state.rover, [state.rover?.id])
-  const dayType = useMemo(() => state.dayType, [state.dayType])
+  const selectedDayType = useMemo(() => state.dayType ?? DayType.EARTH, [state.dayType])
   function changeDayType(e: React.ChangeEvent<HTMLSelectElement>) {
     const value = e.target.value
-    actions.setDayType(value)
+    if (value === DayType.EARTH) {
+      const maxDate = selectedRover?.max_date
+        ? useFormatedDate(new Date(Date.parse(selectedRover?.max_date)))
+        : new Date()
+      actions.setDayType(value, maxDate)
+    }
+    if (value === DayType.SOL) {
+      const maxDate = selectedRover?.max_sol ? selectedRover?.max_sol : "1"
+      actions.setDayType(value, maxDate)
+    }
   }
   return (
     <>
@@ -19,11 +31,11 @@ function SelectDay() {
           <h2>Date type</h2>
           <Select
             disabled={!selectedRover || isRefetching}
-            defaultValue={dayType}
+            value={selectedDayType}
             onChange={changeDayType}
           >
-            <option value="earth_day">Earth day</option>
-            <option value="sol">Martian day</option>
+            <option value={DayType.EARTH}>Earth day</option>
+            <option value={DayType.SOL}>Martian day</option>
           </Select>
         </Box>
         <DayPicker />

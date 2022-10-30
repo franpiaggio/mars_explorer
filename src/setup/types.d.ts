@@ -9,12 +9,14 @@ type Rover = {
   total_photos: number
   cameras: Camera[]
 }
+
 type Camera = {
   id: number
   name: string
   rover_id: number
   full_name: string
 }
+
 type Photo = {
   id: number
   sol: number
@@ -23,13 +25,15 @@ type Photo = {
   earth_date: string
   rover: Rover[]
 }
+
 type Filters = {
   rover?: Rover | null
   camera?: Camera | null
   page?: number | null
-  day?: string
-  dayType?: string
+  day?: string | null
+  dayType?: string | null
 }
+
 interface FilterAction {
   type: string
   payload: {

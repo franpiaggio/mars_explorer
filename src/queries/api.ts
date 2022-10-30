@@ -4,8 +4,8 @@ const getPhotosUrl = (
   name: string,
   camera: string | null,
   page: number,
-  day: string,
-  dayType: string
+  day: string | null,
+  dayType: string | null
 ): URL => {
   const url = new URL(`${baseUrl}/rovers/${name}/photos`)
   if (camera) {
@@ -14,7 +14,7 @@ const getPhotosUrl = (
   if (page) {
     url.searchParams.append("page", String(page))
   }
-  if (day) {
+  if (day && dayType) {
     url.searchParams.append(dayType, day)
   }
   url.searchParams.append("api_key", key)
@@ -28,8 +28,8 @@ const fetchRoverData = async (
   roverName: string | null,
   camera: string | null,
   page: number = 1,
-  day: string = "1",
-  dayType: string = "sol"
+  day: string | null = "1",
+  dayType: string | null = "sol"
 ) => {
   if (!roverName) return
   const url = getPhotosUrl(roverName, camera, page, day, dayType)

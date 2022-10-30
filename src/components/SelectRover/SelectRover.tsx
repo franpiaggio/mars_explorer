@@ -7,11 +7,12 @@ function SelectRovers() {
   const { listRovers, roversLoaded } = useRovers()
   const { state, actions } = useContext(FiltersContext)
   const { isRefetching } = useRoverPhotos()
+  const selectedDayType = useMemo(() => state.dayType, [state.dayType])
+  const selectedRover = useMemo(() => state.rover, [state.rover?.id])
   const onChangeRover = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const value = e.target.value
-    actions.setRover(parseInt(value), listRovers.rovers)
+    actions.setRover(parseInt(value), listRovers.rovers, selectedDayType)
   }
-  const selectedRover = useMemo(() => state.rover, [state.rover?.id])
   return (
     <Select
       disabled={!roversLoaded || isRefetching}
