@@ -12,7 +12,6 @@ interface Props {
   isRefetching?: boolean
 }
 function Header({ isRefetching }: Props) {
-  console.log("HEADER")
   const { colorMode, toggleColorMode } = useColorMode()
   return (
     <Flex minWidth="max-content" alignItems="center" gap="2">

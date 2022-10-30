@@ -1,50 +1,34 @@
 import { useContext, useMemo } from "react"
-import {
-  NumberInput,
-  NumberInputField,
-  NumberInputStepper,
-  NumberIncrementStepper,
-  NumberDecrementStepper,
-} from "@chakra-ui/react"
-import { useRovers } from "@/queries/useRovers"
+import { Flex, Box, Select } from "@chakra-ui/react"
 import { FiltersContext } from "@/state/FiltersContext"
+import { useRoverPhotos } from "@/queries"
+import { DayPicker } from "./DayPicker"
 function SelectDay() {
-  const { roversLoaded } = useRovers()
   const { state, actions } = useContext(FiltersContext)
-  const selectedRover = useMemo(() => (state ? state.rover : null), [state])
-  const onChangeCamera = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  const { isRefetching } = useRoverPhotos()
+  const selectedRover = useMemo(() => state.rover, [state.rover?.id])
+  const dayType = useMemo(() => state.dayType, [state.dayType])
+  function changeDayType(e: React.ChangeEvent<HTMLSelectElement>) {
     const value = e.target.value
-    // actions?.setCamera(value)
+    actions.setDayType(value)
   }
-  // console.log(selectedRover)
   return (
     <>
-      <h2>Sol Date:</h2>
-      <NumberInput
-        defaultValue={0}
-        max={selectedRover?.max_sol ? selectedRover?.max_sol : undefined}
-        placeholder={roversLoaded ? "Martian Day..." : "Loading"}
-        clampValueOnBlur={false}
-      >
-        <NumberInputField />
-        <NumberInputStepper>
-          <NumberIncrementStepper />
-          <NumberDecrementStepper />
-        </NumberInputStepper>
-      </NumberInput>
+      <Flex align="center" justify="flex-end">
+        <Box>
+          <h2>Date type</h2>
+          <Select
+            disabled={!selectedRover || isRefetching}
+            defaultValue={dayType}
+            onChange={changeDayType}
+          >
+            <option value="earth_day">Earth day</option>
+            <option value="sol">Martian day</option>
+          </Select>
+        </Box>
+        <DayPicker />
+      </Flex>
     </>
-    // <Select
-    //   onChange={onChangeCamera}
-    //   disabled={!roversLoaded}
-    //   defaultValue={state?.camera ? state.camera.name : undefined}
-    //   placeholder={!selectedRover && !roversLoaded ? "Loading..." : undefined}
-    // >
-    //   {selectedRover?.cameras.map((camera: any) => (
-    //     <option key={camera.id} value={camera.name}>
-    //       {camera.name}
-    //     </option>
-    //   ))}
-    // </Select>
   )
 }
 export default SelectDay

@@ -27,6 +27,8 @@ type Filters = {
   rover?: Rover | null
   camera?: Camera | null
   page?: number | null
+  day?: string
+  dayType?: string
 }
 interface FilterAction {
   type: string
@@ -37,7 +39,9 @@ interface FilterAction {
     roverId?: number
     cameraId?: number
     typeDay?: string
+    day?: string
     page?: number
+    dayType?: string
   }
 }
 

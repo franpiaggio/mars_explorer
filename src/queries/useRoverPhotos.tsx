@@ -14,16 +14,16 @@ function useRoverPhotos() {
     [state?.camera?.id]
   )
   const page = useMemo(() => state.page || 1, [state.page])
+  const day = useMemo(() => state.day, [state.day])
+  const dayType = useMemo(() => state.dayType, [state.dayType])
 
   const res = useInfiniteQuery(
-    ["photos", selectedRoverName, selectedCameraName],
-    ({ pageParam }) => fetchRoverData(selectedRoverName, selectedCameraName, pageParam),
+    ["photos", selectedRoverName, selectedCameraName, day, dayType],
+    ({ pageParam }) =>
+      fetchRoverData(selectedRoverName, selectedCameraName, pageParam, day, dayType),
     {
       enabled: !!selectedRoverName,
-      keepPreviousData: true,
-      getNextPageParam: () => {
-        return page
-      },
+      getNextPageParam: () => page,
       getPreviousPageParam: () => false,
     }
   )

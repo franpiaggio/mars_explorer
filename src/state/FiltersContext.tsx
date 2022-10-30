@@ -1,6 +1,7 @@
 import { createContext, useReducer, useMemo } from "react"
 import { filtersReducer } from "./FiltersReducer"
 import { filtersActions } from "./FiltersActions"
+import { useFormatedDate } from "@/hooks"
 import type { Filters } from "@/setup/types"
 
 interface FiltersContext {
@@ -12,6 +13,8 @@ const initialState: Filters = {
   rover: null,
   camera: null,
   page: 1,
+  day: useFormatedDate(),
+  dayType: "sol",
 }
 
 const initialContext = {

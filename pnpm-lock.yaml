@@ -14,6 +14,9 @@ specifiers:
   '@typescript-eslint/eslint-plugin': ^5.41.0
   '@typescript-eslint/parser': ^5.41.0
   '@vitejs/plugin-react': ^2.2.0
+  chakra-dayzed-datepicker: ^0.2.4
+  date-fns: ^2.29.3
+  dayzed: ^3.2.3
   eslint: ^8.26.0
   eslint-plugin-react: ^7.31.10
   framer-motion: ^7.6.1
@@ -36,6 +39,9 @@ dependencies:
   '@emotion/styled': 11.10.5_wm6ohc3abj5yburmg6pjdgzp24
   '@tanstack/react-query': 4.13.0_biqbaboplfbrettd7655fr4n2y
   '@tanstack/react-query-devtools': 4.13.0_vwr3yfyniquaygdm2roeczqxuu
+  chakra-dayzed-datepicker: 0.2.4_bbvjflvjoibwhtpmedigb26h6y
+  date-fns: 2.29.3
+  dayzed: 3.2.3_react@18.2.0
   framer-motion: 7.6.2_biqbaboplfbrettd7655fr4n2y
   localforage: 1.10.0
   match-sorter: 6.3.1
@@ -2266,6 +2272,18 @@ packages:
       type-detect: 4.0.8
     dev: true
 
+  /chakra-dayzed-datepicker/0.2.4_bbvjflvjoibwhtpmedigb26h6y:
+    resolution: {integrity: sha512-5e5mECaPCDRAgWhsbOKcagiYwG//ZvFS1+1f8hhrx5GGZvc9OKL8NW51XsYxCczpH+UU62MIpzAVVV2qm1nBwg==}
+    engines: {node: '>=10'}
+    peerDependencies:
+      react: '>=16'
+    dependencies:
+      react: 18.2.0
+      react-focus-lock: 2.9.1_bbvjflvjoibwhtpmedigb26h6y
+    transitivePeerDependencies:
+      - '@types/react'
+    dev: false
+
   /chalk/2.4.2:
     resolution: {integrity: sha512-Mti+f9lpJNcwF4tWV8/OrTTtF1gZi+f8FqlyAdouralcFWFQWF2+NgCHShjkCb+IFBLq9buZwE1xckQU4peSuQ==}
     engines: {node: '>=4'}
@@ -2404,6 +2422,22 @@ packages:
       whatwg-mimetype: 3.0.0
       whatwg-url: 11.0.0
     dev: true
+
+  /date-fns/2.29.3:
+    resolution: {integrity: sha512-dDCnyH2WnnKusqvZZ6+jA1O51Ibt8ZMRNkDZdyAyK4YfbDwa/cEmuztzG5pk6hqlp9aSBPYcjOlktquahGwGeA==}
+    engines: {node: '>=0.11'}
+    dev: false
+
+  /dayzed/3.2.3_react@18.2.0:
+    resolution: {integrity: sha512-qXTIKs+R6ydWwNo+X1wu3lUptyRSGoyY+ZzRcQSM0zUlaG+/Ei+bFjqbQm1T2oJ+WKNkTHURBcGsxnx9N+9kfA==}
+    peerDependencies:
+      prop-types: ^15
+      react: ^16.8 || ^17.0 || ^18.0
+    dependencies:
+      '@babel/runtime': 7.20.0
+      date-fns: 2.29.3
+      react: 18.2.0
+    dev: false
 
   /debug/4.3.4:
     resolution: {integrity: sha512-PRWFHuSU3eDtQJPvnNY7Jcket1j0t5OuOsFzPPzsekD52Zl8qUfFIPEiswXqIvHWGVHOgX+7G/vCNNhehwxfkQ==}

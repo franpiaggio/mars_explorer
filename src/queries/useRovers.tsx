@@ -11,7 +11,6 @@ function useRovers() {
   useEffect(() => {
     if (res.isSuccess && actions) {
       actions.setDefaultRover(listRovers.rovers[listRovers.rovers.length - 1])
-      actions.setDefaultCamera(null)
     }
   }, [roversLoaded])
 

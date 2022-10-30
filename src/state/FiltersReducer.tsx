@@ -25,6 +25,12 @@ function filtersReducer(state: Filters, action: FilterAction): Filters {
         : null
       return { ...state, camera: selectedCamera }
 
+    case ACTIONS.SET_DAY:
+      return { ...state, day: action.payload.day }
+
+    case ACTIONS.SET_DAY_TYPE:
+      return { ...state, dayType: action.payload.dayType }
+
     case ACTIONS.SET_NEXT_PAGE:
       return { ...state, page: state.page ? state.page + 1 : null }
   }

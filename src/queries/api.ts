@@ -1,6 +1,12 @@
 const key = import.meta.env.VITE_NASA_API_KEY
 const baseUrl = "https://api.nasa.gov/mars-photos/api/v1"
-const getPhotosUrl = (name: string, camera: string | null, page: number): URL => {
+const getPhotosUrl = (
+  name: string,
+  camera: string | null,
+  page: number,
+  day: string,
+  dayType: string
+): URL => {
   const url = new URL(`${baseUrl}/rovers/${name}/photos`)
   if (camera) {
     url.searchParams.append("camera", camera.toLocaleLowerCase())
@@ -8,8 +14,10 @@ const getPhotosUrl = (name: string, camera: string | null, page: number): URL =>
   if (page) {
     url.searchParams.append("page", String(page))
   }
+  if (day) {
+    url.searchParams.append(dayType, day)
+  }
   url.searchParams.append("api_key", key)
-  url.searchParams.append("sol", "1")
   return url
 }
 const fetchRovers = async () => {
@@ -19,10 +27,12 @@ const fetchRovers = async () => {
 const fetchRoverData = async (
   roverName: string | null,
   camera: string | null,
-  page: number = 1
+  page: number = 1,
+  day: string = "1",
+  dayType: string = "sol"
 ) => {
   if (!roverName) return
-  const url = getPhotosUrl(roverName, camera, page)
+  const url = getPhotosUrl(roverName, camera, page, day, dayType)
   const res = await fetch(url)
   return res.json()
 }

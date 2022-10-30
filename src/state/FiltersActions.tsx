@@ -42,6 +42,22 @@ function filtersActions(dispatch: Dispatch) {
         payload: {},
       })
     },
+    setDay: (day: string) => {
+      dispatch({
+        type: ACTIONS.SET_DAY,
+        payload: {
+          day: day,
+        },
+      })
+    },
+    setDayType: (dayType: string) => {
+      dispatch({
+        type: ACTIONS.SET_DAY_TYPE,
+        payload: {
+          dayType: dayType,
+        },
+      })
+    },
   }
 }
 export { filtersActions }

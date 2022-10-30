@@ -38,11 +38,9 @@ function PhotoGrid() {
           hasMore={page && lastPageHasData && firstPageIsFull}
           next={() => actions.setNextPage()}
           loader={<Spinner />}
-          scrollThreshold={0.95}
+          scrollThreshold={0.85}
           endMessage={
-            <p style={{ textAlign: "center" }}>
-              <b>No more pictures for this day </b>
-            </p>
+            <p style={{ textAlign: "center" }}>No more pictures for this day</p>
           }
         >
           <SimpleGrid columns={{ base: 1, sm: 1, xl: 3 }} spacing={10}>
