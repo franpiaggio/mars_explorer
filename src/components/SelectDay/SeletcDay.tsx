@@ -5,9 +5,11 @@ import { useRoverPhotos } from "@/queries"
 import { DayPicker } from "@/components/SelectDay/DayPicker"
 import { useFormatedDate } from "@/hooks"
 import { DayType } from "@/components/SelectDay/DayType"
+import { useFiltersContext } from "@/hooks/useFiltersContext"
 
 function SelectDay() {
-  const { state, actions } = useContext(FiltersContext)
+  // const { state, actions } = useContext(FiltersContext)
+  const { state, actions } = useFiltersContext()
   const { isRefetching } = useRoverPhotos()
   const selectedRover = useMemo(() => state.rover, [state.rover?.id])
   const selectedDayType = useMemo(() => state.dayType ?? DayType.EARTH, [state.dayType])

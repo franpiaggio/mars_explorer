@@ -4,4 +4,13 @@ import SelectRover from "./SelectRover/SelectRover"
 import SelectCamera from "./SelectCamera/SelectCamera"
 import SelectDay from "./SelectDay/SeletcDay"
 import RoverPhoto from "./RoverPhoto/RoverPhoto"
-export { Filters, PhotoGrid, SelectRover, SelectCamera, SelectDay, RoverPhoto }
+import ErrorBoundary from "./ErrorBoundary/ErrorBoundary"
+export {
+  Filters,
+  PhotoGrid,
+  SelectRover,
+  SelectCamera,
+  SelectDay,
+  RoverPhoto,
+  ErrorBoundary,
+}

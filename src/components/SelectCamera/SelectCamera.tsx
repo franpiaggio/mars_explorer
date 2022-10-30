@@ -2,10 +2,12 @@ import { useContext, useMemo } from "react"
 import { Select } from "@chakra-ui/react"
 import { useRovers, useRoverPhotos } from "@/queries/"
 import { FiltersContext } from "@/state/FiltersContext"
+import type { Camera } from "@/setup/types"
+import { useFiltersContext } from "@/hooks/useFiltersContext"
 function SelectCamera() {
   const { roversLoaded } = useRovers()
   const { isRefetching } = useRoverPhotos()
-  const { state, actions } = useContext(FiltersContext)
+  const { state, actions } = useFiltersContext()
   const selectedRover = useMemo(() => state.rover, [state.rover?.id])
   const selectedCamera = useMemo(() => state?.camera, [state.camera?.id])
   const onChangeCamera = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -24,7 +26,7 @@ function SelectCamera() {
       placeholder={!selectedRover && !roversLoaded ? "Loading..." : undefined}
     >
       <option value={"all"}>All</option>
-      {selectedRover?.cameras.map((camera: any) => (
+      {selectedRover?.cameras.map((camera: Camera) => (
         <option key={camera.id} value={camera.id}>
           {camera.name}
         </option>

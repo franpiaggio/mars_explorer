@@ -5,8 +5,9 @@ import { RoverPhoto } from "@/components"
 import { FiltersContext } from "@/state/FiltersContext"
 import InfiniteScroll from "react-infinite-scroll-component"
 import type { Photo } from "@/setup/types"
+import { useFiltersContext } from "@/hooks/useFiltersContext"
 function PhotoGrid() {
-  const { state, actions } = useContext(FiltersContext)
+  const { state, actions } = useFiltersContext()
   const { roverData, pagesData, isError, isRefetching, fetchNextPage } = useRoverPhotos()
   const page = useMemo(() => state.page ?? 1, [state.page])
 

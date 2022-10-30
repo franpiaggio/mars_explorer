@@ -10,14 +10,14 @@ import {
 import { SingleDatepicker } from "chakra-dayzed-datepicker"
 import { useDebounce } from "@/hooks/"
 import { useRovers } from "@/queries/useRovers"
-import { FiltersContext } from "@/state/FiltersContext"
 import { useFormatedDate } from "@/hooks"
 import { useRoverPhotos } from "@/queries"
 import { DayType } from "@/components/SelectDay/DayType"
-import { formatToAllowedDate } from "@/hooks/useFormatedDate"
+import { formatToAllowedDate, formatDateToPicker } from "@/hooks/useFormatedDate"
+import { useFiltersContext } from "@/hooks/useFiltersContext"
 
 function DayPicker() {
-  const { state, actions } = useContext(FiltersContext)
+  const { state, actions } = useFiltersContext()
   const selectedRover = useMemo(() => state.rover, [state.rover?.id])
   const [inputDate, setInputDate] = useState("1")
   const debouncedValue = useDebounce(inputDate, 500)
@@ -26,25 +26,28 @@ function DayPicker() {
   const dayType = useMemo(() => state.dayType, [state.dayType])
   const earthDay = useMemo(() => {
     if (state.day && dayType === DayType.EARTH) {
-      const dateWithPickerFormat = formatToAllowedDate(state.day)
-      console.log(dateWithPickerFormat)
-      const selectedDay = new Date(dateWithPickerFormat + "T00:00:00")
-      return selectedDay
+      return formatDateToPicker(state.day)
     }
     return undefined
   }, [state.day])
+  const maxEarthDay = selectedRover
+    ? formatDateToPicker(selectedRover?.max_date)
+    : undefined
+  const minEarthDay = selectedRover
+    ? formatDateToPicker(selectedRover?.landing_date)
+    : undefined
+
   const onChangeDay = (value: string) => {
     setInputDate(value)
   }
+
   const onChangeEarthDay = (e: any) => {
-    actions.setDay(useFormatedDate(e))
+    actions.setDay(formatToAllowedDate(useFormatedDate(e)))
   }
 
   useEffect(() => {
     setInputDate(String(selectedRover?.max_sol))
   }, [selectedRover])
-
-  useEffect(() => {}, [])
 
   useEffect(() => {
     if (dayType === DayType.SOL) {
@@ -80,6 +83,8 @@ function DayPicker() {
         name="date-input"
         date={earthDay}
         onDateChange={onChangeEarthDay}
+        minDate={minEarthDay}
+        maxDate={maxEarthDay}
       />
     </Box>
   )

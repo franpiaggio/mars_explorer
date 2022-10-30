@@ -1,10 +1,10 @@
-import { useMemo, useContext } from "react"
+import { useMemo } from "react"
 import { fetchRoverData } from "@/queries/api"
 import { useInfiniteQuery } from "@tanstack/react-query"
-import { FiltersContext } from "@/state/FiltersContext"
+import { useFiltersContext } from "@/hooks/useFiltersContext"
 
 function useRoverPhotos() {
-  const { state } = useContext(FiltersContext)
+  const { state } = useFiltersContext()
   const selectedRoverName: string | null = useMemo(
     () => (state.rover ? state.rover.name.toLowerCase() : null),
     [state.rover?.id]

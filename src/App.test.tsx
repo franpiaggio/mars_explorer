@@ -1,10 +1,9 @@
 import { render, screen } from "@testing-library/react"
 import { MemoryRouter } from "react-router-dom"
 import { describe, it, vi, beforeAll } from "vitest"
-import { ChakraProvider, ColorModeScript } from "@chakra-ui/react"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
-import { theme } from "./setup/theme"
 import { App } from "./App"
+import * as fetchRoverModule from "@/queries/api"
 
 interface props {
   path: string
@@ -17,7 +16,13 @@ const mockMatchMedia = {
   })),
 }
 
-const mockClient = new QueryClient()
+const mockClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: false,
+    },
+  },
+})
 
 function RenderMockApp({ path }: props) {
   return (
@@ -32,9 +37,8 @@ function RenderMockApp({ path }: props) {
 describe("App routing", () => {
   beforeAll(() => {
     Object.defineProperty(window, "matchMedia", mockMatchMedia)
-    vi.mock("react-query", () => ({
-      useQuery: vi.fn().mockReturnValue({ data: {}, isLoading: false, error: {} }),
-    }))
+    vi.spyOn(fetchRoverModule, "fetchRovers").mockResolvedValue({})
+    vi.spyOn(fetchRoverModule, "fetchRoverData").mockResolvedValue({})
   })
   it("Renders home", () => {
     render(<RenderMockApp path="/" />)
