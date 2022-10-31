@@ -1,4 +1,4 @@
-import { ACTIONS } from "./actions"
+import { ACTIONS } from "@/state/actions"
 import type { Rover, Camera, Filters, FilterAction } from "@/setup/types"
 import { DayType } from "@/components/SelectDay/DayType"
 function filtersReducer(state: Filters, action: FilterAction): Filters {

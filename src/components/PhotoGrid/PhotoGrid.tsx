@@ -1,15 +1,26 @@
 import { useMemo, useEffect } from "react"
-import { SimpleGrid, Skeleton, Spinner, Tag, TagLabel, Flex } from "@chakra-ui/react"
+import {
+  SimpleGrid,
+  Skeleton,
+  Spinner,
+  Tag,
+  TagLabel,
+  Flex,
+  useToast,
+} from "@chakra-ui/react"
 import { useRoverPhotos } from "@/queries"
 import { RoverPhoto } from "@/components"
 import { useFiltersContext } from "@/hooks/useFiltersContext"
 import type { Photo } from "@/setup/types"
 import { GridLoading } from "@/components/"
 import { EmptyState } from "@/components"
+import { useFavs } from "@/hooks/useFavs"
 import InfiniteScroll from "react-infinite-scroll-component"
 function PhotoGrid() {
+  const toast = useToast()
   const { state, actions } = useFiltersContext()
   const { roverData, pagesData, isError, isRefetching, fetchNextPage } = useRoverPhotos()
+  const { setNewFav } = useFavs()
   const page = useMemo(() => state.page ?? 1, [state.page])
 
   // A solution for not having totalPages on API
@@ -17,6 +28,16 @@ function PhotoGrid() {
   const firstPageIsFull = pagesData && pagesData.pages[0].photos.length === 25
   const lastPageHasData =
     pagesData && pagesData.pages[pagesData.pages.length - 1].photos.length
+
+  const savePhoto = (photo: any) => {
+    toast({
+      title: "Added to favourites 🌌👾",
+      status: "success",
+      position: "top-right",
+      isClosable: true,
+    })
+    setNewFav(photo)
+  }
 
   useEffect(() => {
     if (page && page > 1) {
@@ -59,6 +80,7 @@ function PhotoGrid() {
                   id={photo.id}
                   src={photo.img_src}
                   camera={photo.camera.full_name}
+                  favCb={() => savePhoto(photo)}
                 />
               </Skeleton>
             ))}

@@ -23,7 +23,7 @@ type Photo = {
   camera: Camera
   img_src: string
   earth_date: string
-  rover: Rover[]
+  rover: Rover
 }
 
 type Filters = {

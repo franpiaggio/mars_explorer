@@ -6,6 +6,7 @@ import { theme } from "./setup/theme"
 import { FiltersContextProvider } from "@/state/FiltersContext"
 import Home from "./pages/Home"
 import About from "./pages/About"
+import Favs from "./pages/Favs"
 import NotFound from "./pages/NotFound"
 
 const queryClient = new QueryClient({
@@ -24,6 +25,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
+          <Route path="/favs" element={<Favs />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </FiltersContextProvider>

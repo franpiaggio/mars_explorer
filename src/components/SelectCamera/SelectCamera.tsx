@@ -18,7 +18,7 @@ function SelectCamera() {
     actions.setCamera(parseInt(value))
   }
   return (
-    <FormControl maxW={{ base: "auto", md: "300px" }} marginRight="15px">
+    <FormControl marginTop="10px" maxW={{ base: "auto", md: "300px" }} marginRight="15px">
       <FormLabel>Camera</FormLabel>
       <Select
         maxW={{ base: "auto" }}

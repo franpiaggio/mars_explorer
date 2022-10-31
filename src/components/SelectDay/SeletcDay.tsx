@@ -26,7 +26,12 @@ function SelectDay() {
   }
   return (
     <>
-      <Flex width={{ base: "100%", md: "1200px" }} align="center" justify="flex-end">
+      <Flex
+        marginTop="10px"
+        width={{ base: "100%", md: "1200px" }}
+        align="center"
+        justify="flex-end"
+      >
         <FormControl marginRight={"15px"} maxW={{ base: "auto", md: "300px" }}>
           <FormLabel>Type date</FormLabel>
           <Select

@@ -8,6 +8,7 @@ import ErrorBoundary from "./ErrorBoundary/ErrorBoundary"
 import GridLoading from "./PhotoGrid/GridLoading"
 import EmptyState from "./EmptyState/EmptyState"
 import ScrollToTop from "./ScrollToTop/ScrollToTop"
+import FavsGrid from "./FavsGrid/FavsGrid"
 export {
   Filters,
   PhotoGrid,
@@ -19,4 +20,5 @@ export {
   GridLoading,
   EmptyState,
   ScrollToTop,
+  FavsGrid,
 }

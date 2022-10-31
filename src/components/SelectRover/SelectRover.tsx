@@ -15,7 +15,11 @@ function SelectRovers() {
   }
   return (
     <>
-      <FormControl marginRight={"15px"} maxW={{ base: "auto", md: "300px" }}>
+      <FormControl
+        marginTop="10px"
+        marginRight={"15px"}
+        maxW={{ base: "auto", md: "300px" }}
+      >
         <FormLabel>Rover</FormLabel>
         <Select
           maxW={{ base: "auto" }}

@@ -56,6 +56,9 @@ function Header({ isRefetching }: Props) {
                     <Link to="/">
                       <MenuItem>Photos</MenuItem>
                     </Link>
+                    <Link to="/favs">
+                      <MenuItem>Favourites</MenuItem>
+                    </Link>
                     <Link to="/about">
                       <MenuItem>About this app</MenuItem>
                     </Link>
