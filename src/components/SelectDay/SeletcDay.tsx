@@ -15,7 +15,7 @@ function SelectDay() {
     const value = e.target.value
     if (value === DayType.EARTH) {
       const maxDate = selectedRover?.max_date
-        ? useFormatedDate(new Date(Date.parse(selectedRover?.max_date)))
+        ? useFormatedDate(new Date(Date.parse(selectedRover?.max_date + "T00:00:00")))
         : new Date()
       actions.setDayType(value, maxDate)
     }
