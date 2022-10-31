@@ -36,4 +36,4 @@ function FiltersContextProvider({ children }: Props) {
   )
 }
 
-export { FiltersContextProvider, FiltersContext }
+export { FiltersContextProvider, FiltersContext, initialState }

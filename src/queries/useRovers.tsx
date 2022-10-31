@@ -10,7 +10,7 @@ function useRovers() {
   const roversLoaded = res.isFetched
 
   useEffect(() => {
-    if (res.isSuccess && actions) {
+    if (res.isSuccess && listRovers) {
       const selected = listRovers.rovers[0]
       const maxDate = selected.max_date
         ? formatToAllowedDate(selected.max_date)

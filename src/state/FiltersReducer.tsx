@@ -1,6 +1,7 @@
 import { ACTIONS } from "@/state/actions"
 import type { Rover, Camera, Filters, FilterAction } from "@/setup/types"
 import { DayType } from "@/components/SelectDay/DayType"
+import { initialState } from "./FiltersContext"
 function filtersReducer(state: Filters, action: FilterAction): Filters {
   switch (action.type) {
     case ACTIONS.SET_DEFAULT_ROVER:
@@ -48,6 +49,9 @@ function filtersReducer(state: Filters, action: FilterAction): Filters {
 
     case ACTIONS.SET_NEXT_PAGE:
       return { ...state, page: state.page ? state.page + 1 : null }
+
+    case ACTIONS.SET_DEFAULT_VALUES:
+      return initialState
   }
   return state
 }

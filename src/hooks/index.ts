@@ -1,3 +1,4 @@
 import useDebounce from "./useDebounce"
 import useFormatedDate from "./useFormatedDate"
-export { useDebounce, useFormatedDate }
+import { useFiltersContext } from "./useFiltersContext"
+export { useDebounce, useFormatedDate, useFiltersContext }

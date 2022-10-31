@@ -61,6 +61,12 @@ function filtersActions(dispatch: Dispatch) {
         },
       })
     },
+    setDefaultValues: () => {
+      dispatch({
+        type: ACTIONS.SET_DEFAULT_VALUES,
+        payload: {},
+      })
+    },
   }
 }
 export { filtersActions }

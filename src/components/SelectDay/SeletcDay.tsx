@@ -20,7 +20,7 @@ function SelectDay() {
       actions.setDayType(value, maxDate)
     }
     if (value === DayType.SOL) {
-      const maxDate = selectedRover?.max_sol ? selectedRover?.max_sol : "1"
+      const maxDate = selectedRover?.max_sol ? selectedRover?.max_sol : null
       actions.setDayType(value, maxDate)
     }
   }

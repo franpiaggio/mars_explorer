@@ -6,5 +6,6 @@ enum ACTIONS {
   SET_DAY = "setDay",
   SET_DAY_TYPE = "setDayType",
   SET_NEXT_PAGE = "setNextPage",
+  SET_DEFAULT_VALUES = "setDefaultValues",
 }
 export { ACTIONS }
