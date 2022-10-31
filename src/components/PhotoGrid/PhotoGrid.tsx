@@ -1,10 +1,11 @@
 import { useMemo, useEffect } from "react"
-import { SimpleGrid, Skeleton, Spinner, Heading } from "@chakra-ui/react"
+import { SimpleGrid, Skeleton, Spinner, Tag, TagLabel, Flex } from "@chakra-ui/react"
 import { useRoverPhotos } from "@/queries"
 import { RoverPhoto } from "@/components"
 import { useFiltersContext } from "@/hooks/useFiltersContext"
 import type { Photo } from "@/setup/types"
 import { GridLoading } from "@/components/"
+import { EmptyState } from "@/components"
 import InfiniteScroll from "react-infinite-scroll-component"
 function PhotoGrid() {
   const { state, actions } = useFiltersContext()
@@ -24,11 +25,11 @@ function PhotoGrid() {
   }, [page])
 
   if (isError) {
-    return <h3>ERROR</h3>
+    return <EmptyState isError />
   }
 
   if (isFirstPage && !lastPageHasData) {
-    return <h3>NO HAY DATOS</h3>
+    return <EmptyState />
   }
 
   if (pagesData) {
@@ -41,7 +42,11 @@ function PhotoGrid() {
           loader={<Spinner />}
           scrollThreshold={0.85}
           endMessage={
-            <p style={{ textAlign: "center" }}>No more pictures for this day</p>
+            <Flex justify="center" marginTop="50px">
+              <Tag size="lg">
+                <TagLabel>No more photos to load for this day</TagLabel>
+              </Tag>
+            </Flex>
           }
         >
           <SimpleGrid columns={{ base: 1, sm: 1, xl: 3 }} spacing={10}>

@@ -19,14 +19,7 @@ function SelectCamera() {
   }
   return (
     <FormControl maxW={{ base: "auto", md: "300px" }} marginRight="15px">
-      <FormLabel>
-        Camera{" "}
-        {selectedCamera?.name && (
-          <span style={{ fontWeight: "300", fontSize: "12px" }}>
-            : {selectedCamera.full_name}
-          </span>
-        )}
-      </FormLabel>
+      <FormLabel>Camera</FormLabel>
       <Select
         maxW={{ base: "auto" }}
         onChange={onChangeCamera}

@@ -1,6 +1,6 @@
 import { Box, Divider } from "@chakra-ui/react"
 import { Layout } from "@/layout"
-import { Filters, PhotoGrid } from "@/components"
+import { Filters, PhotoGrid, ScrollToTop } from "@/components"
 
 function Home() {
   return (
@@ -11,6 +11,7 @@ function Home() {
           <Divider orientation="horizontal" />
         </Box>
         <PhotoGrid />
+        <ScrollToTop />
       </Box>
     </Layout>
   )

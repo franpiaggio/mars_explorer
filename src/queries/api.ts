@@ -28,8 +28,8 @@ const fetchRoverData = async (
   roverName: string | null,
   camera: string | null,
   page: number = 1,
-  day: string | null,
-  dayType: string | null
+  day: string | null = "1",
+  dayType: string | null = "earth_date"
 ) => {
   if (!roverName) return
   const url = getPhotosUrl(roverName, camera, page, day, dayType)

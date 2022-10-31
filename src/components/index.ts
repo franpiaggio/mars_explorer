@@ -6,6 +6,8 @@ import SelectDay from "./SelectDay/SeletcDay"
 import RoverPhoto from "./RoverPhoto/RoverPhoto"
 import ErrorBoundary from "./ErrorBoundary/ErrorBoundary"
 import GridLoading from "./PhotoGrid/GridLoading"
+import EmptyState from "./EmptyState/EmptyState"
+import ScrollToTop from "./ScrollToTop/ScrollToTop"
 export {
   Filters,
   PhotoGrid,
@@ -15,4 +17,6 @@ export {
   RoverPhoto,
   ErrorBoundary,
   GridLoading,
+  EmptyState,
+  ScrollToTop,
 }

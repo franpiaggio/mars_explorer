@@ -1,4 +1,5 @@
-import { Image, Box, Tag, TagLabel, Link, Flex } from "@chakra-ui/react"
+import { Image, Box, Tag, TagLabel, Link } from "@chakra-ui/react"
+import { ExternalLinkIcon } from "@chakra-ui/icons"
 function RoverPhoto({ id, src, camera }: any) {
   return (
     <Box
@@ -25,7 +26,7 @@ function RoverPhoto({ id, src, camera }: any) {
       <Link href={src} isExternal marginTop="auto">
         <Tag size="lg" colorScheme="green" marginTop="10px">
           <TagLabel>
-            #{id} {camera}
+            #{id} {camera} <ExternalLinkIcon />
           </TagLabel>
         </Tag>
       </Link>
