@@ -1,11 +1,11 @@
-import { useMemo, useContext, useEffect } from "react"
-import { SimpleGrid, Skeleton, Spinner } from "@chakra-ui/react"
+import { useMemo, useEffect } from "react"
+import { SimpleGrid, Skeleton, Spinner, Heading } from "@chakra-ui/react"
 import { useRoverPhotos } from "@/queries"
 import { RoverPhoto } from "@/components"
-import { FiltersContext } from "@/state/FiltersContext"
-import InfiniteScroll from "react-infinite-scroll-component"
-import type { Photo } from "@/setup/types"
 import { useFiltersContext } from "@/hooks/useFiltersContext"
+import type { Photo } from "@/setup/types"
+import { GridLoading } from "@/components/"
+import InfiniteScroll from "react-infinite-scroll-component"
 function PhotoGrid() {
   const { state, actions } = useFiltersContext()
   const { roverData, pagesData, isError, isRefetching, fetchNextPage } = useRoverPhotos()
@@ -24,11 +24,11 @@ function PhotoGrid() {
   }, [page])
 
   if (isError) {
-    return <h2>ERROR</h2>
+    return <h3>ERROR</h3>
   }
 
   if (isFirstPage && !lastPageHasData) {
-    return <h2>NO HAY DATOS</h2>
+    return <h3>NO HAY DATOS</h3>
   }
 
   if (pagesData) {
@@ -50,7 +50,11 @@ function PhotoGrid() {
                 key={photo.id}
                 isLoaded={(!isRefetching && page === 1) || page > 1}
               >
-                <RoverPhoto id={photo.id} src={photo.img_src} />
+                <RoverPhoto
+                  id={photo.id}
+                  src={photo.img_src}
+                  camera={photo.camera.full_name}
+                />
               </Skeleton>
             ))}
           </SimpleGrid>
@@ -59,7 +63,7 @@ function PhotoGrid() {
     )
   }
 
-  return <h2>LOADING</h2>
+  return <GridLoading />
 }
 
 export default PhotoGrid

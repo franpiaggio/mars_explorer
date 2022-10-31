@@ -1,7 +1,6 @@
-import { useContext, useMemo } from "react"
-import { Select } from "@chakra-ui/react"
+import { useMemo } from "react"
+import { Select, FormLabel, FormHelperText, FormControl } from "@chakra-ui/react"
 import { useRovers, useRoverPhotos } from "@/queries/"
-import { FiltersContext } from "@/state/FiltersContext"
 import type { Camera } from "@/setup/types"
 import { useFiltersContext } from "@/hooks/useFiltersContext"
 function SelectCamera() {
@@ -19,19 +18,30 @@ function SelectCamera() {
     actions.setCamera(parseInt(value))
   }
   return (
-    <Select
-      onChange={onChangeCamera}
-      disabled={!roversLoaded || isRefetching}
-      defaultValue={selectedCamera ? selectedCamera.name : undefined}
-      placeholder={!selectedRover && !roversLoaded ? "Loading..." : undefined}
-    >
-      <option value={"all"}>All</option>
-      {selectedRover?.cameras.map((camera: Camera) => (
-        <option key={camera.id} value={camera.id}>
-          {camera.name}
-        </option>
-      ))}
-    </Select>
+    <FormControl maxW={{ base: "auto", md: "300px" }} marginRight="15px">
+      <FormLabel>
+        Camera{" "}
+        {selectedCamera?.name && (
+          <span style={{ fontWeight: "300", fontSize: "12px" }}>
+            : {selectedCamera.full_name}
+          </span>
+        )}
+      </FormLabel>
+      <Select
+        maxW={{ base: "auto" }}
+        onChange={onChangeCamera}
+        disabled={!roversLoaded || isRefetching}
+        defaultValue={selectedCamera ? selectedCamera.name : undefined}
+        placeholder={!selectedRover && !roversLoaded ? "Loading..." : undefined}
+      >
+        <option value={"all"}>All</option>
+        {selectedRover?.cameras.map((camera: Camera) => (
+          <option key={camera.id} value={camera.id}>
+            {camera.name}
+          </option>
+        ))}
+      </Select>
+    </FormControl>
   )
 }
 export default SelectCamera

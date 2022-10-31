@@ -42,10 +42,12 @@ describe("App routing", () => {
   })
   it("Renders home", () => {
     render(<RenderMockApp path="/" />)
-    expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("MARS ROVERS")
+    expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(
+      "Nasa Rover Explorer"
+    )
   })
   it("Renders not found if path is invalid", () => {
     render(<RenderMockApp path="/aliens" />)
-    expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("Oops!")
+    expect(screen.getByRole("heading", { level: 2 })).toHaveTextContent("404")
   })
 })

@@ -1,14 +1,17 @@
-import { Header, Layout } from "@/layout"
+import { Box, Divider } from "@chakra-ui/react"
+import { Layout } from "@/layout"
 import { Filters, PhotoGrid } from "@/components"
-import { Link } from "react-router-dom"
 
 function Home() {
   return (
     <Layout>
-      <Link to={"/about"}> Ir About </Link>
-      <Header />
       <Filters />
-      <PhotoGrid />
+      <Box marginTop="50px" as="main">
+        <Box marginBottom="50px">
+          <Divider orientation="horizontal" />
+        </Box>
+        <PhotoGrid />
+      </Box>
     </Layout>
   )
 }

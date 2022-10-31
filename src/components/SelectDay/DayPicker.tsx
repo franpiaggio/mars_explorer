@@ -1,11 +1,13 @@
-import { useContext, useMemo, useEffect, useState } from "react"
+import { useMemo, useEffect, useState } from "react"
 import {
   NumberInput,
   NumberInputField,
   NumberInputStepper,
   NumberIncrementStepper,
   NumberDecrementStepper,
-  Box,
+  FormControl,
+  FormLabel,
+  useToast,
 } from "@chakra-ui/react"
 import { SingleDatepicker } from "chakra-dayzed-datepicker"
 import { useDebounce } from "@/hooks/"
@@ -17,6 +19,7 @@ import { formatToAllowedDate, formatDateToPicker } from "@/hooks/useFormatedDate
 import { useFiltersContext } from "@/hooks/useFiltersContext"
 
 function DayPicker() {
+  const toast = useToast()
   const { state, actions } = useFiltersContext()
   const selectedRover = useMemo(() => state.rover, [state.rover?.id])
   const [inputDate, setInputDate] = useState("1")
@@ -25,7 +28,12 @@ function DayPicker() {
   const { isRefetching } = useRoverPhotos()
   const dayType = useMemo(() => state.dayType, [state.dayType])
   const earthDay = useMemo(() => {
-    if (state.day && dayType === DayType.EARTH) {
+    /*
+     * state.day !== "1" is for a bug that i didnt have the time to solve :(
+     * When changing the router and dayType was DayType.SOL a value is by default "1"
+     * And <SingleDatepicker /> throws an error
+     */
+    if (state.day && dayType === DayType.EARTH && state.day !== "1") {
       return formatDateToPicker(state.day)
     }
     return undefined
@@ -38,6 +46,16 @@ function DayPicker() {
     : undefined
 
   const onChangeDay = (value: string) => {
+    if (selectedRover && parseInt(value) > selectedRover.max_sol) {
+      toast({
+        id: 1,
+        title: "Max Martian date for this rover is " + selectedRover.max_sol,
+        status: "warning",
+        position: "top-right",
+        isClosable: true,
+      })
+      return
+    }
     setInputDate(value)
   }
 
@@ -57,11 +75,12 @@ function DayPicker() {
 
   if (dayType === DayType.SOL) {
     return (
-      <Box>
-        <h2>Day. Max: {selectedRover?.max_sol}</h2>
+      <FormControl marginRight={"15px"} maxW={{ base: "auto", md: "300px" }}>
+        <FormLabel>Day</FormLabel>
         <NumberInput
           value={inputDate}
-          max={selectedRover?.max_sol ? selectedRover?.max_sol : undefined}
+          min={0}
+          max={selectedRover?.max_sol ? selectedRover.max_sol : undefined}
           placeholder={roversLoaded ? "Martian Day..." : "Loading"}
           clampValueOnBlur={false}
           onChange={onChangeDay}
@@ -72,21 +91,21 @@ function DayPicker() {
             <NumberDecrementStepper />
           </NumberInputStepper>
         </NumberInput>
-      </Box>
+      </FormControl>
     )
   }
   return (
-    <Box>
-      <h2>Day Max: {selectedRover?.max_date}</h2>
+    <FormControl marginRight={"5px"} maxW={{ base: "auto", md: "300px" }}>
+      <FormLabel>Day</FormLabel>
       <SingleDatepicker
         disabled={!selectedRover || isRefetching}
         name="date-input"
-        date={earthDay}
+        date={earthDay || undefined}
         onDateChange={onChangeEarthDay}
         minDate={minEarthDay}
         maxDate={maxEarthDay}
       />
-    </Box>
+    </FormControl>
   )
 }
 export { DayPicker }

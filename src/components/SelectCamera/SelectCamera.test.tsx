@@ -6,6 +6,14 @@ import { mockFilterContext, mockClient } from "@/setup/tests"
 import * as fetchRoverModule from "@/queries/api"
 import * as ContextModule from "@/hooks/useFiltersContext"
 
+function RenderWithQueryMock() {
+  return (
+    <QueryClientProvider client={mockClient}>
+      <SelectCamera />
+    </QueryClientProvider>
+  )
+}
+
 describe("Select camera", () => {
   beforeAll(() => {
     vi.spyOn(fetchRoverModule, "fetchRovers").mockResolvedValue({
@@ -19,23 +27,14 @@ describe("Select camera", () => {
 
   const cameras = mockFilterContext.state.rover.cameras
   it("Shows a list of available cameras in the FilterState", () => {
-    render(
-      <QueryClientProvider client={mockClient}>
-        <SelectCamera />
-      </QueryClientProvider>
-    )
-
+    render(<RenderWithQueryMock />)
     cameras.forEach((camera) => {
       expect(screen.getByText(camera.name)).toBeInTheDocument()
     })
   })
 
   it("Trigger onChange function with corresponding camera id", () => {
-    render(
-      <QueryClientProvider client={mockClient}>
-        <SelectCamera />
-      </QueryClientProvider>
-    )
+    render(<RenderWithQueryMock />)
     vi.spyOn(mockFilterContext.actions, "setCamera")
     const selectOne = screen.getByRole("combobox")
     fireEvent.change(selectOne, { target: { value: cameras[0].id } })

@@ -1,18 +1,37 @@
+import { Box, Heading, Text, Button } from "@chakra-ui/react"
 import { Link } from "react-router-dom"
-import { Heading, Box } from "@chakra-ui/react"
-import { Layout } from "@/layout"
+import { Header } from "@/layout"
 function NotFound() {
   return (
-    <Layout>
-      <Box textAlign="center">
-        <Heading as="h1" size="md">
-          Oops!
+    <>
+      <Header />
+      <Box textAlign="center" py={10} px={6}>
+        <Heading
+          display="inline-block"
+          as="h2"
+          size="2xl"
+          bgGradient="linear(to-r, teal.400, teal.600)"
+          backgroundClip="text"
+        >
+          404
         </Heading>
-        <p>No existe esta sección.</p>
-        <Link to={"/"}> Volver </Link>
+        <Text fontSize="18px" mt={3} mb={2}>
+          Page Not Found
+        </Text>
+        <Text color={"gray.500"} mb={6}>
+          The page you're looking for does not seem to exist
+        </Text>
+
+        <Button
+          colorScheme="teal"
+          bgGradient="linear(to-r, teal.400, teal.500, teal.600)"
+          color="white"
+          variant="solid"
+        >
+          <Link to="/">Go to Home</Link>
+        </Button>
       </Box>
-    </Layout>
+    </>
   )
 }
-
 export default NotFound

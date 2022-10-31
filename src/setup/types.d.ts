@@ -20,7 +20,7 @@ type Camera = {
 type Photo = {
   id: number
   sol: number
-  camera: Camera[]
+  camera: Camera
   img_src: string
   earth_date: string
   rover: Rover[]

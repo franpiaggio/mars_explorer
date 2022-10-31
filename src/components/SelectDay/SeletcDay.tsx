@@ -1,6 +1,5 @@
-import { useContext, useMemo } from "react"
-import { Flex, Box, Select } from "@chakra-ui/react"
-import { FiltersContext } from "@/state/FiltersContext"
+import { useMemo } from "react"
+import { Flex, Box, Select, FormLabel, FormControl } from "@chakra-ui/react"
 import { useRoverPhotos } from "@/queries"
 import { DayPicker } from "@/components/SelectDay/DayPicker"
 import { useFormatedDate } from "@/hooks"
@@ -8,7 +7,6 @@ import { DayType } from "@/components/SelectDay/DayType"
 import { useFiltersContext } from "@/hooks/useFiltersContext"
 
 function SelectDay() {
-  // const { state, actions } = useContext(FiltersContext)
   const { state, actions } = useFiltersContext()
   const { isRefetching } = useRoverPhotos()
   const selectedRover = useMemo(() => state.rover, [state.rover?.id])
@@ -28,9 +26,9 @@ function SelectDay() {
   }
   return (
     <>
-      <Flex align="center" justify="flex-end">
-        <Box>
-          <h2>Date type</h2>
+      <Flex width={{ base: "100%", md: "1200px" }} align="center" justify="flex-end">
+        <FormControl marginRight={"15px"} maxW={{ base: "auto", md: "300px" }}>
+          <FormLabel>Type date</FormLabel>
           <Select
             disabled={!selectedRover || isRefetching}
             value={selectedDayType}
@@ -39,7 +37,7 @@ function SelectDay() {
             <option value={DayType.EARTH}>Earth day</option>
             <option value={DayType.SOL}>Martian day</option>
           </Select>
-        </Box>
+        </FormControl>
         <DayPicker />
       </Flex>
     </>

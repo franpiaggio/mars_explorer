@@ -5,6 +5,7 @@ import SelectCamera from "./SelectCamera/SelectCamera"
 import SelectDay from "./SelectDay/SeletcDay"
 import RoverPhoto from "./RoverPhoto/RoverPhoto"
 import ErrorBoundary from "./ErrorBoundary/ErrorBoundary"
+import GridLoading from "./PhotoGrid/GridLoading"
 export {
   Filters,
   PhotoGrid,
@@ -13,4 +14,5 @@ export {
   SelectDay,
   RoverPhoto,
   ErrorBoundary,
+  GridLoading,
 }
