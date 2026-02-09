@@ -1,5 +1,6 @@
 .env
 .DS_Store
+*.backup
 
 # Frontend
 frontend/node_modules/

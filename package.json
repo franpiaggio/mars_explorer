@@ -20,6 +20,8 @@
     "db:migrate": "docker compose exec backend bundle exec rake db:migrate",
     "db:console": "docker compose exec db psql -U ${DB_USERNAME:-mars} -d ${DB_NAME:-mars_curiosity_production}",
     "rails:console": "docker compose exec backend bundle exec rails console",
+    "db:dump": "docker compose exec db pg_dump -U ${DB_USERNAME:-mars} -d ${DB_NAME:-mars_curiosity_production} --format=custom -f /tmp/mars_dump.backup && docker compose cp db:/tmp/mars_dump.backup ./mars_dump.backup",
+    "db:restore": "docker compose cp ./mars_dump.backup db:/tmp/mars_dump.backup && docker compose exec db pg_restore -U ${DB_USERNAME:-mars} -d ${DB_NAME:-mars_curiosity_production} --clean --if-exists /tmp/mars_dump.backup",
     "clean": "docker compose down -v"
   }
 }

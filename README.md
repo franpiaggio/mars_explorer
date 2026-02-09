@@ -130,6 +130,8 @@ npm run db:console
 | `npm run logs` | Follow all container logs |
 | `npm run rails:console` | Open Rails console |
 | `npm run db:console` | Open PostgreSQL console |
+| `npm run db:dump` | Export database to `mars_dump.backup` |
+| `npm run db:restore` | Restore database from `mars_dump.backup` |
 | `npm run clean` | Stop containers and **delete all data** |
 
 ## Deploy with Coolify
