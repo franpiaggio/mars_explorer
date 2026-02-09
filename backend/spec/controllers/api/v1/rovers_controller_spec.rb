@@ -1,0 +1,69 @@
+require 'rails_helper'
+
+describe Api::V1::RoversController do
+  let!(:rover) { create(:rover) }
+
+  describe "GET 'index'" do
+    context "with no query parameters" do
+      before(:each) do
+        get :index
+      end
+
+      it "returns http 200 success" do
+        expect(response.status).to eq 200
+      end
+
+      it "renders rovers json" do
+        expect(json["rovers"].length).to eq 1
+      end
+    end
+  end
+
+  describe "GET 'show'" do
+    context "with a valid rover name" do
+      let(:camera) { create(:camera, rover: rover) }
+
+      before(:each) do
+        create(:photo, rover: rover, sol: 1, camera: camera)
+        create(:photo, rover: rover, sol: 30, camera: camera)
+        create(:photo, rover: rover, sol: 100, camera: camera)
+        create(:photo, rover: rover, sol: 100, camera: camera)
+        get :show, params: { id: rover.name }
+      end
+
+      it "returns http 200 success" do
+        expect(response.status).to eq 200
+      end
+
+      it "renders the proper rover json" do
+        expect(json["rover"]["name"]).to eq rover.name
+      end
+
+      it "contains the mission's landing_date" do
+        expect(json["rover"]["landing_date"]).to eq rover.landing_date.to_s
+      end
+
+      it "contains the mission's launch_date" do
+        expect(json["rover"]["launch_date"]).to eq rover.launch_date.to_s
+      end
+
+      it "contains the mission's status" do
+        expect(json["rover"]["status"]).to eq rover.status
+      end
+    end
+
+    context "with an invalid rover name" do
+      before(:each) do
+        get :show, params: { id: "Rover" }
+      end
+
+      it "returns http 400 bad request" do
+        expect(response.status).to eq 400
+      end
+
+      it "renders the proper rover json" do
+        expect(json["errors"]).to eq "Invalid Rover Name"
+      end
+    end
+  end
+end

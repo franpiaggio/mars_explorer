@@ -1,0 +1,21 @@
+engines:
+  duplication:
+    enabled: true
+    config:
+      languages:
+      - ruby
+  rubocop:
+    enabled: true
+  flog:
+    enabled: true
+    config:
+      score_threshold: 15
+exclude_paths:
+- "spec/**/*"
+- "db/**/*"
+- "public"
+- "bin"
+ratings:
+  paths:
+   - "app/**/*"
+   - "**.rb"
