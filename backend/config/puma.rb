@@ -5,7 +5,7 @@ threads max_threads, max_threads
 
 preload_app!
 
-port ENV.fetch("RAILS_PORT", 3000)
+port ENV.fetch("RAILS_PORT", 3002)
 environment ENV.fetch("RAILS_ENV", "production")
 
 on_worker_boot do
