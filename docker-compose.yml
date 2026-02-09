@@ -55,7 +55,7 @@ services:
     build:
       context: ./frontend
     ports:
-      - "${PORT:-80}:80"
+      - "${PORT:-8082}:80"
     environment:
       RAILS_PORT: ${RAILS_PORT:-3002}
     depends_on:
