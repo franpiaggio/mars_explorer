@@ -30,6 +30,7 @@ services:
       RAILS_ENV: production
       RAILS_LOG_TO_STDOUT: "true"
       RAILS_SERVE_STATIC_FILES: "true"
+      RAILS_PORT: ${RAILS_PORT:-3002}
       DB_HOST: db
       DB_PORT: "5432"
       DB_USERNAME: ${DB_USERNAME}
@@ -44,7 +45,7 @@ services:
       redis:
         condition: service_healthy
     healthcheck:
-      test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1:3002/api/v1/rovers"]
+      test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1:${RAILS_PORT:-3002}/api/v1/rovers"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -55,6 +56,8 @@ services:
       context: ./frontend
     ports:
       - "${PORT:-80}:80"
+    environment:
+      RAILS_PORT: ${RAILS_PORT:-3002}
     depends_on:
       backend:
         condition: service_healthy
