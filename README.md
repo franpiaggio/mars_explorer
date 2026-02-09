@@ -2,7 +2,7 @@
 
 A self-hosted Mars rover photo explorer. Browse thousands of real photos taken by NASA's Curiosity, Perseverance, Opportunity, and Spirit rovers — served from your own infrastructure.
 
-> **Why this fork?** The original [mars-photo-api](https://github.com/corincerami/mars-photo-api) by [Corin Cerami](https://github.com/corincerami) was archived in 2025. I forked it to keep a working version of this API as a learning project and added a React frontend with Docker Compose for easy self-hosting.
+> I originally built this frontend years ago as a coding challenge using NASA's public Mars Rover Photos API. I kept coming back to browse the photos every now and then — there's something about seeing what another planet looks like through a rover's camera. When the API was archived in 2025, I forked the [original backend](https://github.com/corincerami/mars-photo-api) by [Corin Cerami](https://github.com/corincerami) and turned it into a self-hosted project so I could keep it running on my own infrastructure.
 
 ## What's Inside
 
