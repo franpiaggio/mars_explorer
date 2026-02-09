@@ -12,11 +12,3 @@ end
 task scrape_curiosity: :environment do
   CuriosityScraper.new.scrape
 end
-
-task scrape_opportunity: :environment do
-  OpportunitySpiritScraper.new("Opportunity").scrape
-end
-
-task scrape_spirit: :environment do
-  OpportunitySpiritScraper.new("Spirit").scrape
-end

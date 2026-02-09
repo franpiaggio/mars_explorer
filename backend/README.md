@@ -16,7 +16,9 @@
 I built this API as a student project back in 2014 and then rebuilt it in 2015. It then became a part of NASA's Open Data Portal in the fall of 2015. I've maintained this API for the last 10 years by myself, but I no longer have the time to properly maintain it. The search for other maintainers came up empty so this repo is now an archive only. If you are interested in using any of this code, feel free to fork it and use it however you'd like.
 
 
-This API is designed to collect image data gathered by NASA's Perseverance, Curiosity, Opportunity, and Spirit rovers on Mars and make it more easily available to other developers, educators, and citizen scientists.
+This API is designed to collect image data gathered by NASA's Perseverance and Curiosity rovers on Mars and make it more easily available to other developers, educators, and citizen scientists.
+
+> **Note:** Opportunity and Spirit rover data was previously supported but has been removed. NASA retired the MER (Mars Exploration Rover) gallery and API endpoints in 2025, making it impossible to scrape new data for those rovers.
 
 ## API Keys
 
@@ -49,23 +51,19 @@ Along with querying by date, results can also be filtered by the camera with whi
    SKYCAM|MEDA Skycam
    SHERLOC_WATSON|SHERLOC WATSON Camera
 
-#### Other rovers
+#### Curiosity rover
 
-  Abbreviation | Camera                         | Curiosity | Opportunity | Spirit
-  ------------ | ------------------------------ | --------  | ----------- | ------ |
-   FHAZ|Front Hazard Avoidance Camera|✔|✔|✔|
-   RHAZ|Rear Hazard Avoidance Camera|✔|✔|✔|
-   MAST|Mast Camera| ✔||
-   CHEMCAM|Chemistry and Camera Complex  |✔||
-   MAHLI|Mars Hand Lens Imager|✔||
-   MARDI|Mars Descent Imager|✔||
-   NAVCAM|Navigation Camera|✔|✔|✔|
-   PANCAM|Panoramic Camera| |✔|✔|
-   MINITES|Miniature Thermal Emission Spectrometer (Mini-TES)| |✔|✔|
+  Abbreviation | Camera
+  ------------ | ------------------------------
+   FHAZ|Front Hazard Avoidance Camera
+   RHAZ|Rear Hazard Avoidance Camera
+   MAST|Mast Camera
+   CHEMCAM|Chemistry and Camera Complex
+   MAHLI|Mars Hand Lens Imager
+   MARDI|Mars Descent Imager
+   NAVCAM|Navigation Camera
 
 ## Querying the API
-
-Substitute `https://api.nasa.gov/mars-photos/` with `https://mars-photos.herokuapp.com/` if you want to query the API from a web application. The heroku version allows cross-origin requests and *doesnt require an API key*.
 
 The API can be queried in the following format:
 
@@ -88,8 +86,6 @@ https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?api_key=DEMO_KEY
 The camera parameter is not case sensitive, but must be one of the camera abbreviations listed in the table above for the respective rover.
 
 https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?api_key=DEMO_KEY&sol=1000&camera=fhaz
-
-https://api.nasa.gov/mars-photos/api/v1/rovers/opportunity/photos?api_key=DEMO_KEY&earth_date=2015-6-3&camera=pancam
 
 #### Query For Latest Photos
 

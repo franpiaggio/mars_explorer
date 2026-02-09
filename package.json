@@ -15,8 +15,6 @@
     "seed": "docker compose exec backend bundle exec rails runner db/seeds_only_rovers.rb",
     "scrape:perseverance": "docker compose exec backend bundle exec rake scrape_perseverance",
     "scrape:curiosity": "docker compose exec backend bundle exec rake scrape_curiosity",
-    "scrape:opportunity": "docker compose exec backend bundle exec rake scrape_opportunity",
-    "scrape:spirit": "docker compose exec backend bundle exec rake scrape_spirit",
     "db:migrate": "docker compose exec backend bundle exec rake db:migrate",
     "db:console": "docker compose exec db psql -U ${DB_USERNAME:-mars} -d ${DB_NAME:-mars_curiosity_production}",
     "rails:console": "docker compose exec backend bundle exec rails console",

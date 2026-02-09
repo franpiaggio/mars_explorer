@@ -1,6 +1,6 @@
 # Mars Explorer
 
-A self-hosted Mars rover photo explorer. Browse thousands of real photos taken by NASA's Curiosity, Perseverance, Opportunity, and Spirit rovers — served from your own infrastructure.
+A self-hosted Mars rover photo explorer. Browse thousands of real photos taken by NASA's Curiosity and Perseverance rovers — served from your own infrastructure.
 
 > I originally built this frontend years ago as a coding challenge using NASA's public Mars Rover Photos API. I kept coming back to browse the photos every now and then — there's something about seeing what another planet looks like through a rover's camera. When the API was archived in 2025, I forked the [original backend](https://github.com/corincerami/mars-photo-api) by [Corin Cerami](https://github.com/corincerami) and turned it into a self-hosted project so I could keep it running on my own infrastructure.
 
@@ -83,14 +83,12 @@ npm run seed
 
 ### 4. Scrape photos from NASA
 
-Each scraper fetches photo metadata from NASA/JPL. They take a while depending on the rover (Curiosity has 700k+ photos).
+Each scraper fetches photo metadata from NASA/JPL. They take a while depending on the rover (Curiosity has 60k+ photos).
 
 ```bash
 # Run one at a time — each takes minutes to hours
 npm run scrape:perseverance
 npm run scrape:curiosity
-npm run scrape:opportunity
-npm run scrape:spirit
 ```
 
 > You can start using the app after seeding — scrapers can run in the background.
@@ -125,8 +123,6 @@ npm run db:console
 | `npm run seed` | Seed rovers and cameras (no photos) |
 | `npm run scrape:perseverance` | Scrape Perseverance photos from NASA |
 | `npm run scrape:curiosity` | Scrape Curiosity photos from NASA |
-| `npm run scrape:opportunity` | Scrape Opportunity photos from NASA |
-| `npm run scrape:spirit` | Scrape Spirit photos from NASA |
 | `npm run logs` | Follow all container logs |
 | `npm run rails:console` | Open Rails console |
 | `npm run db:console` | Open PostgreSQL console |
@@ -152,7 +148,7 @@ After deployment, SSH into your server and seed the data:
 cd /path/to/your/deployment
 docker compose exec backend bundle exec rails runner db/seeds_only_rovers.rb
 docker compose exec backend bundle exec rake scrape_perseverance
-# ... repeat for other rovers
+docker compose exec backend bundle exec rake scrape_curiosity
 ```
 
 ## API Endpoints
