@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react"
-import { Box, Flex, IconButton, ButtonGroup, useColorModeValue } from "@chakra-ui/react"
+import { useState, useEffect, useMemo } from "react"
+import { Box, Flex, IconButton, ButtonGroup, Text, useColorModeValue } from "@chakra-ui/react"
 import { Layout } from "@/layout"
 import { Filters, PhotoGrid, ScrollToTop } from "@/components"
 import MobileSolNav from "@/components/MobileSolNav/MobileSolNav"
@@ -30,10 +30,23 @@ function ListIcon() {
 
 function Home() {
   const [gridView, setGridView] = useState<GridView>("grid")
-  const { actions } = useFiltersContext()
+  const { state, actions } = useFiltersContext()
   const toggleBg = useColorModeValue("gray.100", "whiteAlpha.100")
   const toggleActiveBg = useColorModeValue("white", "gray.600")
   const borderColor = useColorModeValue("gray.200", "whiteAlpha.200")
+  const dateColor = useColorModeValue("gray.500", "whiteAlpha.700")
+
+  const formattedDate = useMemo(() => {
+    if (!state.earth_date) return null
+    const [year, month, day] = state.earth_date.split("-").map(Number)
+    const date = new Date(year, month - 1, day)
+    return date.toLocaleDateString("en-US", {
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    })
+  }, [state.earth_date])
 
   useEffect(() => {
     return () => {
@@ -46,6 +59,18 @@ function Home() {
       <Box pt={{ base: 2, md: 4 }}>
         <Filters />
         <MobileSolNav />
+        {formattedDate && (
+          <Text
+            textAlign="center"
+            fontSize={{ base: "sm", md: "md" }}
+            color={dateColor}
+            mt={{ base: 2, md: 3 }}
+            fontWeight="500"
+            letterSpacing="wide"
+          >
+            {formattedDate}
+          </Text>
+        )}
         <Box mt={{ base: 2, md: 3 }} as="main">
           <Flex justify="flex-end" mb={2}>
             <ButtonGroup size="xs" isAttached variant="outline">

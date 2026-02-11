@@ -47,6 +47,7 @@ function Layout({ children }: Props) {
         maxW={{ base: "100%", xl: "80%" }}
         minH="100vh"
         px={{ base: 3, md: 4 }}
+        pt={{ base: 2, md: 4 }}
         pb={{ base: "80px", md: 4 }}
       >
         <Box
