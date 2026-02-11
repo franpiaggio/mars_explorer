@@ -136,6 +136,7 @@ function PhotoGrid({ gridView = "grid" }: PhotoGridProps) {
             src={lightboxPhoto.img_src}
             id={lightboxPhoto.id}
             camera={lightboxPhoto.camera.full_name}
+            roverName={state.rover?.name}
             onToggleFav={() => savePhoto(lightboxPhoto)}
             onPrev={handlePrev}
             onNext={handleNext}

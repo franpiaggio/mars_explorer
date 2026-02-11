@@ -12,8 +12,11 @@ import {
   CloseIcon,
   ExternalLinkIcon,
   ViewIcon,
+  InfoOutlineIcon,
 } from "@chakra-ui/icons"
 import PhotoLightbox from "@/components/PhotoLightbox/PhotoLightbox"
+import CameraInfoModal from "@/components/CameraInfoModal/CameraInfoModal"
+import { useFiltersContext } from "@/hooks/useFiltersContext"
 
 interface Props {
   id: number
@@ -27,6 +30,9 @@ interface Props {
 
 function RoverPhoto({ id, src, camera, favCb, roverName, removeBtn, onOpenLightbox }: Props) {
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const { isOpen: isCameraInfoOpen, onOpen: onCameraInfoOpen, onClose: onCameraInfoClose } = useDisclosure()
+  const { state } = useFiltersContext()
+  const resolvedRoverName = roverName || state.rover?.name
   const cardBg = useColorModeValue("white", "gray.700")
   const overlayBg = "rgba(0, 0, 0, 0.6)"
   const actionBarBg = "rgba(0, 0, 0, 0.5)"
@@ -39,6 +45,11 @@ function RoverPhoto({ id, src, camera, favCb, roverName, removeBtn, onOpenLightb
   const handleFav = (e: React.MouseEvent) => {
     e.stopPropagation()
     favCb()
+  }
+
+  const handleCameraInfo = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    onCameraInfoOpen()
   }
 
   const handleExpand = (e: React.MouseEvent) => {
@@ -83,22 +94,40 @@ function RoverPhoto({ id, src, camera, favCb, roverName, removeBtn, onOpenLightb
         />
 
         {/* Camera badge overlay - top left */}
-        <Badge
+        <Flex
           position="absolute"
           top={1.5}
           left={1.5}
-          bg={overlayBg}
-          color="white"
-          fontSize={{ base: "9px", md: "xs" }}
-          fontWeight="500"
-          px={1.5}
-          py={0.5}
-          borderRadius="md"
-          maxW={{ base: "calc(100% - 12px)", md: "auto" }}
-          noOfLines={1}
+          align="center"
+          gap={0.5}
         >
-          {camera}
-        </Badge>
+          <Badge
+            bg={overlayBg}
+            color="white"
+            fontSize={{ base: "9px", md: "xs" }}
+            fontWeight="500"
+            px={1.5}
+            py={0.5}
+            borderRadius="md"
+            maxW={{ base: "calc(100% - 12px)", md: "auto" }}
+            noOfLines={1}
+          >
+            {camera}
+          </Badge>
+          <IconButton
+            aria-label="Camera info"
+            icon={<InfoOutlineIcon boxSize={{ base: 2.5, md: 3 }} />}
+            size="xs"
+            bg={overlayBg}
+            color="whiteAlpha.800"
+            borderRadius="md"
+            minW={{ base: "18px", md: "22px" }}
+            minH={{ base: "18px", md: "22px" }}
+            h={{ base: "18px", md: "22px" }}
+            _hover={{ bg: "rgba(0,0,0,0.8)", color: "white" }}
+            onClick={handleCameraInfo}
+          />
+        </Flex>
 
         {/* Rover name badge (favorites page) */}
         {roverName && (
@@ -203,11 +232,18 @@ function RoverPhoto({ id, src, camera, favCb, roverName, removeBtn, onOpenLightb
           src={src}
           id={id}
           camera={camera}
-          roverName={roverName}
+          roverName={resolvedRoverName}
           onToggleFav={favCb}
           removeMode={removeBtn}
         />
       )}
+
+      <CameraInfoModal
+        isOpen={isCameraInfoOpen}
+        onClose={onCameraInfoClose}
+        cameraFullName={camera}
+        roverName={resolvedRoverName}
+      />
     </>
   )
 }

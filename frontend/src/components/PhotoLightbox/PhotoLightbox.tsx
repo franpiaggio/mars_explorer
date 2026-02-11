@@ -11,6 +11,7 @@ import {
   Text,
   Badge,
   useColorModeValue,
+  useDisclosure,
   HStack,
   Box,
 } from "@chakra-ui/react"
@@ -20,7 +21,9 @@ import {
   CloseIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
+  InfoOutlineIcon,
 } from "@chakra-ui/icons"
+import CameraInfoModal from "@/components/CameraInfoModal/CameraInfoModal"
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch"
 import type { ReactZoomPanPinchRef } from "react-zoom-pan-pinch"
 
@@ -57,6 +60,7 @@ function PhotoLightbox({
 }: PhotoLightboxProps) {
   const overlayBg = "rgba(0, 0, 0, 0.85)"
   const toolbarBg = useColorModeValue("whiteAlpha.900", "blackAlpha.700")
+  const { isOpen: isCameraInfoOpen, onOpen: onCameraInfoOpen, onClose: onCameraInfoClose } = useDisclosure()
   const hasNav = onPrev && onNext && totalCount !== undefined && currentIndex !== undefined
 
   const touchStartX = useRef<number | null>(null)
@@ -228,6 +232,18 @@ function PhotoLightbox({
               <Badge variant="subtle" borderRadius="full" px={2}>
                 {camera}
               </Badge>
+              <IconButton
+                aria-label="Camera info"
+                icon={<InfoOutlineIcon boxSize={3.5} />}
+                size="xs"
+                variant="ghost"
+                color="whiteAlpha.700"
+                borderRadius="full"
+                _hover={{ bg: "whiteAlpha.200", color: "white" }}
+                onClick={onCameraInfoOpen}
+                minW="28px"
+                minH="28px"
+              />
               <Text fontSize="xs" color="whiteAlpha.700">
                 #{id}
               </Text>
@@ -264,6 +280,13 @@ function PhotoLightbox({
           </Flex>
         </ModalBody>
       </ModalContent>
+
+      <CameraInfoModal
+        isOpen={isCameraInfoOpen}
+        onClose={onCameraInfoClose}
+        cameraFullName={camera}
+        roverName={roverName}
+      />
     </Modal>
   )
 }
