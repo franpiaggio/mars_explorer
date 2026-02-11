@@ -151,6 +151,53 @@ docker compose exec backend bundle exec rake scrape_perseverance
 docker compose exec backend bundle exec rake scrape_curiosity
 ```
 
+## Daily Scrape (Cron Job)
+
+The scrapers can be scheduled to run automatically so your database stays up to date with the latest Mars rover photos.
+
+### Setup
+
+The script `scripts/scrape.sh` finds the running backend container and executes both scrapers. To schedule it as a daily cron job on your VPS (outside the container):
+
+```bash
+# Make the script executable
+chmod +x /path/to/mars_explorer/scripts/scrape.sh
+
+# Open crontab
+crontab -e
+
+# Add this line to run daily at 3:00 AM UTC
+0 3 * * * /path/to/mars_explorer/scripts/scrape.sh
+```
+
+### Logs
+
+The script logs to `/tmp/scrape.log`. To check if the cron ran successfully:
+
+```bash
+# View the full log
+cat /tmp/scrape.log
+
+# View last run
+tail -5 /tmp/scrape.log
+```
+
+A successful run looks like:
+
+```
+Wed Feb 11 03:00:01 AM UTC 2026 - Starting scrape (container: 1a7d9ede7b2f)
+Wed Feb 11 03:01:03 AM UTC 2026 - Scrape finished
+```
+
+If you see `Backend container not found`, the container may have been restarted or renamed. Check `docker ps` to verify it's running.
+
+### When to expect new photos
+
+- The cron runs daily at **3:00 AM UTC**
+- Each run takes ~1-2 minutes
+- New photos appear in the app immediately after the scrape finishes
+- NASA typically publishes new photos with a 1-2 day delay from when they were taken on Mars
+
 ## API Endpoints
 
 The backend serves a REST API under `/api/v1/`:
