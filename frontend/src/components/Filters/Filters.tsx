@@ -14,9 +14,10 @@ import {
   PopoverBody,
   useDisclosure,
 } from "@chakra-ui/react"
-import { CalendarIcon, ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons"
+import { CalendarIcon, ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon, InfoOutlineIcon } from "@chakra-ui/icons"
 import { useManifest, useAvailableDates, useRovers, useRoverPhotos } from "@/queries"
 import { useFiltersContext } from "@/hooks/useFiltersContext"
+import CameraInfoModal from "@/components/CameraInfoModal/CameraInfoModal"
 import DatePicker from "@/components/DatePicker/DatePicker"
 import SolList from "@/components/DatePicker/SolList"
 import type { ManifestEntry, Camera, Rover } from "@/setup/types"
@@ -29,6 +30,7 @@ function Filters() {
   const { manifest, manifestEntries } = useManifest()
   const { availableDatesSet, dateToEntryMap, entries } = useAvailableDates()
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const { isOpen: isCameraInfoOpen, onOpen: onCameraInfoOpen, onClose: onCameraInfoClose } = useDisclosure()
   const { listRovers, roversLoaded } = useRovers()
   const { isRefetching } = useRoverPhotos()
 
@@ -223,25 +225,39 @@ function Filters() {
 
           {/* Camera selector */}
           {state.rover && (
-            <Select
-              onChange={onChangeCamera}
-              disabled={isRefetching || availableCameras.length === 0}
-              value={state.camera ? state.camera.id : "all"}
-              size="sm"
-              borderRadius="lg"
-              bg={selectBg}
-              borderColor={borderColor}
-              w="auto"
-              maxW="260px"
-              aria-label="Select camera"
-            >
-              <option value="all">All cameras ({availableCameras.length})</option>
-              {availableCameras.map((camera: Camera) => (
-                <option key={camera.id} value={camera.id}>
-                  {camera.full_name}
-                </option>
-              ))}
-            </Select>
+            <Flex align="center" gap={1}>
+              <Select
+                onChange={onChangeCamera}
+                disabled={isRefetching || availableCameras.length === 0}
+                value={state.camera ? state.camera.id : "all"}
+                size="sm"
+                borderRadius="lg"
+                bg={selectBg}
+                borderColor={borderColor}
+                w="auto"
+                maxW="260px"
+                aria-label="Select camera"
+              >
+                <option value="all">All cameras ({availableCameras.length})</option>
+                {availableCameras.map((camera: Camera) => (
+                  <option key={camera.id} value={camera.id}>
+                    {camera.full_name}
+                  </option>
+                ))}
+              </Select>
+              {state.camera && (
+                <IconButton
+                  aria-label="Camera info"
+                  icon={<InfoOutlineIcon boxSize={3.5} />}
+                  size="xs"
+                  variant="ghost"
+                  borderRadius="full"
+                  onClick={onCameraInfoOpen}
+                  minW="28px"
+                  minH="28px"
+                />
+              )}
+            </Flex>
           )}
         </Flex>
 
@@ -257,6 +273,15 @@ function Filters() {
           minW="40px"
         />
       </Flex>
+
+      {state.camera && (
+        <CameraInfoModal
+          isOpen={isCameraInfoOpen}
+          onClose={onCameraInfoClose}
+          cameraFullName={state.camera.full_name}
+          roverName={state.rover?.name}
+        />
+      )}
     </Box>
   )
 }

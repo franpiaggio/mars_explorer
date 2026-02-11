@@ -18,6 +18,11 @@ import {
   StarIcon,
 } from "@chakra-ui/icons"
 import { Layout } from "@/layout"
+import { Suspense, lazy } from "react"
+
+const Mars3D = lazy(() =>
+  import("@/components/Mars3D/Mars3D").then((m) => ({ default: m.Mars3D }))
+)
 
 const ROVERS = [
   {
@@ -121,9 +126,15 @@ function About() {
         <VStack spacing={{ base: 6, md: 8 }} align="stretch">
           {/* Hero */}
           <Box textAlign="center" py={{ base: 4, md: 6 }}>
-            <Text fontSize={{ base: "4xl", md: "5xl" }} mb={3} lineHeight={1}>
-              🔴
-            </Text>
+            <Suspense
+              fallback={
+                <Text fontSize={{ base: "4xl", md: "5xl" }} mb={3} lineHeight={1}>
+                  🔴
+                </Text>
+              }
+            >
+              <Mars3D />
+            </Suspense>
             <Heading size={{ base: "lg", md: "xl" }} mb={3}>
               Mars Explorer
             </Heading>
