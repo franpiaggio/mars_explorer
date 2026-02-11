@@ -1,4 +1,4 @@
-import { useEffect, useCallback, useRef } from "react"
+import { useEffect, useCallback, useRef, useState } from "react"
 import {
   Modal,
   ModalOverlay,
@@ -21,6 +21,8 @@ import {
   ChevronLeftIcon,
   ChevronRightIcon,
 } from "@chakra-ui/icons"
+import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch"
+import type { ReactZoomPanPinchRef } from "react-zoom-pan-pinch"
 
 interface PhotoLightboxProps {
   isOpen: boolean
@@ -58,6 +60,8 @@ function PhotoLightbox({
   const hasNav = onPrev && onNext && totalCount !== undefined && currentIndex !== undefined
 
   const touchStartX = useRef<number | null>(null)
+  const [isZoomed, setIsZoomed] = useState(false)
+  const zoomRef = useRef<ReactZoomPanPinchRef>(null)
 
   const handleOpenNewTab = () => {
     window.open(src, "_blank", "noopener,noreferrer")
@@ -89,7 +93,7 @@ function PhotoLightbox({
   }
 
   const handleTouchEnd = (e: React.TouchEvent) => {
-    if (!hasNav || touchStartX.current === null) return
+    if (!hasNav || touchStartX.current === null || isZoomed) return
     const diff = e.changedTouches[0].clientX - touchStartX.current
     const threshold = 50
     if (diff > threshold) onPrev()
@@ -159,15 +163,32 @@ function PhotoLightbox({
               />
             )}
 
-            <Image
-              src={src}
-              alt={`Mars rover photo ${id} taken by ${camera}`}
-              maxH="85vh"
-              maxW={{ base: "80vw", md: "85vw" }}
-              objectFit="contain"
-              borderRadius="lg"
-              mx="auto"
-            />
+            <TransformWrapper
+              ref={zoomRef}
+              key={src}
+              minScale={1}
+              maxScale={5}
+              doubleClick={{ mode: "toggle", step: 2 }}
+              panning={{ disabled: !isZoomed }}
+              onTransformed={(_, state) => {
+                setIsZoomed(state.scale > 1.05)
+              }}
+            >
+              <TransformComponent
+                wrapperStyle={{ maxHeight: "85vh", maxWidth: "85vw", margin: "0 auto" }}
+                contentStyle={{ display: "flex", justifyContent: "center" }}
+              >
+                <Image
+                  src={src}
+                  alt={`Mars rover photo ${id} taken by ${camera}`}
+                  maxH="85vh"
+                  maxW={{ base: "80vw", md: "85vw" }}
+                  objectFit="contain"
+                  borderRadius="lg"
+                  draggable={false}
+                />
+              </TransformComponent>
+            </TransformWrapper>
 
             {hasNav && currentIndex < totalCount - 1 && (
               <IconButton
