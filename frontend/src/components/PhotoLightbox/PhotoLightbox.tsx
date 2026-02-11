@@ -1,3 +1,4 @@
+import { useEffect, useCallback, useRef } from "react"
 import {
   Modal,
   ModalOverlay,
@@ -11,8 +12,15 @@ import {
   Badge,
   useColorModeValue,
   HStack,
+  Box,
 } from "@chakra-ui/react"
-import { ExternalLinkIcon, StarIcon, CloseIcon } from "@chakra-ui/icons"
+import {
+  ExternalLinkIcon,
+  StarIcon,
+  CloseIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
+} from "@chakra-ui/icons"
 
 interface PhotoLightboxProps {
   isOpen: boolean
@@ -24,6 +32,10 @@ interface PhotoLightboxProps {
   isFavorite?: boolean
   onToggleFav: () => void
   removeMode?: boolean
+  onPrev?: () => void
+  onNext?: () => void
+  currentIndex?: number
+  totalCount?: number
 }
 
 function PhotoLightbox({
@@ -36,12 +48,65 @@ function PhotoLightbox({
   isFavorite,
   onToggleFav,
   removeMode,
+  onPrev,
+  onNext,
+  currentIndex,
+  totalCount,
 }: PhotoLightboxProps) {
   const overlayBg = "rgba(0, 0, 0, 0.85)"
   const toolbarBg = useColorModeValue("whiteAlpha.900", "blackAlpha.700")
+  const hasNav = onPrev && onNext && totalCount !== undefined && currentIndex !== undefined
+
+  const touchStartX = useRef<number | null>(null)
 
   const handleOpenNewTab = () => {
     window.open(src, "_blank", "noopener,noreferrer")
+  }
+
+  const handleKeyDown = useCallback(
+    (e: KeyboardEvent) => {
+      if (!hasNav) return
+      if (e.key === "ArrowLeft") {
+        e.preventDefault()
+        onPrev()
+      } else if (e.key === "ArrowRight") {
+        e.preventDefault()
+        onNext()
+      }
+    },
+    [hasNav, onPrev, onNext]
+  )
+
+  useEffect(() => {
+    if (isOpen) {
+      window.addEventListener("keydown", handleKeyDown)
+      return () => window.removeEventListener("keydown", handleKeyDown)
+    }
+  }, [isOpen, handleKeyDown])
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX
+  }
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (!hasNav || touchStartX.current === null) return
+    const diff = e.changedTouches[0].clientX - touchStartX.current
+    const threshold = 50
+    if (diff > threshold) onPrev()
+    else if (diff < -threshold) onNext()
+    touchStartX.current = null
+  }
+
+  const navButtonStyles = {
+    position: "absolute" as const,
+    top: "50%",
+    transform: "translateY(-50%)",
+    zIndex: 2,
+    bg: "blackAlpha.500",
+    color: "white",
+    borderRadius: "full",
+    _hover: { bg: "blackAlpha.700" },
+    size: "lg" as const,
   }
 
   return (
@@ -74,15 +139,46 @@ function PhotoLightbox({
           p={0}
           onClick={onClose}
         >
-          <Image
-            src={src}
-            alt={`Mars rover photo ${id} taken by ${camera}`}
-            maxH="85vh"
-            maxW="95vw"
-            objectFit="contain"
-            borderRadius="lg"
+          <Box
+            position="relative"
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            w="100%"
             onClick={(e) => e.stopPropagation()}
-          />
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
+          >
+            {hasNav && currentIndex > 0 && (
+              <IconButton
+                aria-label="Previous photo"
+                icon={<ChevronLeftIcon boxSize={8} />}
+                {...navButtonStyles}
+                left={{ base: 1, md: 4 }}
+                onClick={onPrev}
+              />
+            )}
+
+            <Image
+              src={src}
+              alt={`Mars rover photo ${id} taken by ${camera}`}
+              maxH="85vh"
+              maxW={{ base: "80vw", md: "85vw" }}
+              objectFit="contain"
+              borderRadius="lg"
+              mx="auto"
+            />
+
+            {hasNav && currentIndex < totalCount - 1 && (
+              <IconButton
+                aria-label="Next photo"
+                icon={<ChevronRightIcon boxSize={8} />}
+                {...navButtonStyles}
+                right={{ base: 1, md: 4 }}
+                onClick={onNext}
+              />
+            )}
+          </Box>
 
           {/* Toolbar below image */}
           <Flex
@@ -96,6 +192,12 @@ function PhotoLightbox({
             onClick={(e) => e.stopPropagation()}
             backdropFilter="blur(10px)"
           >
+            {hasNav && (
+              <Text fontSize="xs" color="whiteAlpha.700" fontWeight="600">
+                {currentIndex + 1} / {totalCount}
+              </Text>
+            )}
+
             <HStack spacing={1}>
               {roverName && (
                 <Badge colorScheme="orange" borderRadius="full" px={2}>

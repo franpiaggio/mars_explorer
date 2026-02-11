@@ -1,4 +1,4 @@
-import { useMemo, useEffect } from "react"
+import { useMemo, useEffect, useState, useCallback } from "react"
 import {
   SimpleGrid,
   Skeleton,
@@ -10,6 +10,7 @@ import {
 } from "@chakra-ui/react"
 import { useRoverPhotos } from "@/queries"
 import { RoverPhoto } from "@/components"
+import PhotoLightbox from "@/components/PhotoLightbox/PhotoLightbox"
 import { useFiltersContext } from "@/hooks/useFiltersContext"
 import type { Photo } from "@/setup/types"
 import { GridLoading } from "@/components/"
@@ -29,6 +30,23 @@ function PhotoGrid({ gridView = "grid" }: PhotoGridProps) {
   const { setNewFav } = useFavs()
   const page = useMemo(() => state.page ?? 1, [state.page])
   const endMsgColor = useColorModeValue("gray.500", "whiteAlpha.600")
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
+
+  const lightboxPhoto = lightboxIndex !== null ? roverData[lightboxIndex] : null
+
+  const handlePrev = useCallback(() => {
+    setLightboxIndex((prev) => (prev !== null && prev > 0 ? prev - 1 : prev))
+  }, [])
+
+  const handleNext = useCallback(() => {
+    setLightboxIndex((prev) =>
+      prev !== null && prev < roverData.length - 1 ? prev + 1 : prev
+    )
+  }, [roverData.length])
+
+  const handleCloseLightbox = useCallback(() => {
+    setLightboxIndex(null)
+  }, [])
 
   const isFirstPage = pagesData && pagesData.pages.length === 1
   const firstPageIsFull = pagesData && pagesData.pages[0].photos.length === 25
@@ -94,7 +112,7 @@ function PhotoGrid({ gridView = "grid" }: PhotoGridProps) {
           maxW={gridView === "list" ? "600px" : "none"}
           mx={gridView === "list" ? "auto" : undefined}
         >
-          {roverData.map((photo: Photo) => (
+          {roverData.map((photo: Photo, index: number) => (
             <Skeleton
               key={photo.id}
               isLoaded={(!isRefetching && page === 1) || page > 1}
@@ -105,10 +123,26 @@ function PhotoGrid({ gridView = "grid" }: PhotoGridProps) {
                 src={photo.img_src}
                 camera={photo.camera.full_name}
                 favCb={() => savePhoto(photo)}
+                onOpenLightbox={() => setLightboxIndex(index)}
               />
             </Skeleton>
           ))}
         </SimpleGrid>
+
+        {lightboxPhoto && (
+          <PhotoLightbox
+            isOpen={lightboxIndex !== null}
+            onClose={handleCloseLightbox}
+            src={lightboxPhoto.img_src}
+            id={lightboxPhoto.id}
+            camera={lightboxPhoto.camera.full_name}
+            onToggleFav={() => savePhoto(lightboxPhoto)}
+            onPrev={handlePrev}
+            onNext={handleNext}
+            currentIndex={lightboxIndex!}
+            totalCount={roverData.length}
+          />
+        )}
       </InfiniteScroll>
     )
   }

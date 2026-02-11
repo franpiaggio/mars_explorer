@@ -34,7 +34,7 @@ function Home() {
   const toggleBg = useColorModeValue("gray.100", "whiteAlpha.100")
   const toggleActiveBg = useColorModeValue("white", "gray.600")
   const borderColor = useColorModeValue("gray.200", "whiteAlpha.200")
-  const dateColor = useColorModeValue("gray.500", "whiteAlpha.700")
+  const dateColor = useColorModeValue("gray.700", "whiteAlpha.900")
 
   const formattedDate = useMemo(() => {
     if (!state.earth_date) return null
@@ -62,10 +62,10 @@ function Home() {
         {formattedDate && (
           <Text
             textAlign="center"
-            fontSize={{ base: "sm", md: "md" }}
+            fontSize={{ base: "md", md: "lg" }}
             color={dateColor}
             mt={{ base: 2, md: 3 }}
-            fontWeight="500"
+            fontWeight="600"
             letterSpacing="wide"
           >
             {formattedDate}

@@ -22,9 +22,10 @@ interface Props {
   favCb: () => void
   roverName?: string
   removeBtn?: boolean
+  onOpenLightbox?: () => void
 }
 
-function RoverPhoto({ id, src, camera, favCb, roverName, removeBtn }: Props) {
+function RoverPhoto({ id, src, camera, favCb, roverName, removeBtn, onOpenLightbox }: Props) {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const cardBg = useColorModeValue("white", "gray.700")
   const overlayBg = "rgba(0, 0, 0, 0.6)"
@@ -42,7 +43,7 @@ function RoverPhoto({ id, src, camera, favCb, roverName, removeBtn }: Props) {
 
   const handleExpand = (e: React.MouseEvent) => {
     e.stopPropagation()
-    onOpen()
+    onOpenLightbox ? onOpenLightbox() : onOpen()
   }
 
   return (
@@ -70,7 +71,7 @@ function RoverPhoto({ id, src, camera, favCb, roverName, removeBtn }: Props) {
         role="article"
         aria-label={`Photo ${id} from ${camera}${roverName ? ` by ${roverName}` : ""}`}
         cursor="pointer"
-        onClick={onOpen}
+        onClick={onOpenLightbox ?? onOpen}
       >
         <Image
           w="100%"
@@ -195,16 +196,18 @@ function RoverPhoto({ id, src, camera, favCb, roverName, removeBtn }: Props) {
         </Flex>
       </Box>
 
-      <PhotoLightbox
-        isOpen={isOpen}
-        onClose={onClose}
-        src={src}
-        id={id}
-        camera={camera}
-        roverName={roverName}
-        onToggleFav={favCb}
-        removeMode={removeBtn}
-      />
+      {!onOpenLightbox && (
+        <PhotoLightbox
+          isOpen={isOpen}
+          onClose={onClose}
+          src={src}
+          id={id}
+          camera={camera}
+          roverName={roverName}
+          onToggleFav={favCb}
+          removeMode={removeBtn}
+        />
+      )}
     </>
   )
 }
