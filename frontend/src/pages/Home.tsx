@@ -4,6 +4,7 @@ import { Layout } from "@/layout"
 import { Filters, PhotoGrid, ScrollToTop } from "@/components"
 import MobileSolNav from "@/components/MobileSolNav/MobileSolNav"
 import { useFiltersContext } from "@/hooks"
+import { useRoverPhotos } from "@/queries"
 
 type GridView = "grid" | "list"
 
@@ -31,14 +32,17 @@ function ListIcon() {
 function Home() {
   const [gridView, setGridView] = useState<GridView>("grid")
   const { state, actions } = useFiltersContext()
+  const { roverData } = useRoverPhotos()
   const toggleBg = useColorModeValue("gray.100", "whiteAlpha.100")
   const toggleActiveBg = useColorModeValue("white", "gray.600")
   const borderColor = useColorModeValue("gray.200", "whiteAlpha.200")
   const dateColor = useColorModeValue("gray.700", "whiteAlpha.900")
 
+  const earthDate = state.earth_date || (roverData.length > 0 ? roverData[0].earth_date : null)
+
   const formattedDate = useMemo(() => {
-    if (!state.earth_date) return null
-    const [year, month, day] = state.earth_date.split("-").map(Number)
+    if (!earthDate) return null
+    const [year, month, day] = earthDate.split("-").map(Number)
     const date = new Date(year, month - 1, day)
     return date.toLocaleDateString("en-US", {
       weekday: "long",
@@ -46,7 +50,7 @@ function Home() {
       month: "long",
       day: "numeric",
     })
-  }, [state.earth_date])
+  }, [earthDate])
 
   useEffect(() => {
     return () => {
@@ -57,20 +61,20 @@ function Home() {
   return (
     <Layout>
       <Box pt={{ base: 2, md: 4 }}>
-        <Filters />
-        <MobileSolNav />
         {formattedDate && (
           <Text
             textAlign="center"
             fontSize={{ base: "md", md: "lg" }}
             color={dateColor}
-            mt={{ base: 2, md: 3 }}
+            mb={{ base: 2, md: 3 }}
             fontWeight="600"
             letterSpacing="wide"
           >
             {formattedDate}
           </Text>
         )}
+        <Filters />
+        <MobileSolNav />
         <Box mt={{ base: 2, md: 3 }} as="main">
           <Flex justify="flex-end" mb={2}>
             <ButtonGroup size="xs" isAttached variant="outline">
