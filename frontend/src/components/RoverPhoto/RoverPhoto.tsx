@@ -1,7 +1,7 @@
 import {
   Image,
   Box,
-  Badge,
+  Text,
   IconButton,
   Flex,
   useColorModeValue,
@@ -28,14 +28,26 @@ interface Props {
   onOpenLightbox?: () => void
 }
 
-function RoverPhoto({ id, src, camera, favCb, roverName, removeBtn, onOpenLightbox }: Props) {
+function RoverPhoto({
+  id,
+  src,
+  camera,
+  favCb,
+  roverName,
+  removeBtn,
+  onOpenLightbox,
+}: Props) {
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const { isOpen: isCameraInfoOpen, onOpen: onCameraInfoOpen, onClose: onCameraInfoClose } = useDisclosure()
+  const {
+    isOpen: isCameraInfoOpen,
+    onOpen: onCameraInfoOpen,
+    onClose: onCameraInfoClose,
+  } = useDisclosure()
   const { state } = useFiltersContext()
   const resolvedRoverName = roverName || state.rover?.name
-  const cardBg = useColorModeValue("white", "gray.700")
-  const overlayBg = "rgba(0, 0, 0, 0.6)"
-  const actionBarBg = "rgba(0, 0, 0, 0.5)"
+  const cardBg = useColorModeValue("dust.100", "iron.800")
+  const cardBorder = useColorModeValue("dust.200", "iron.700")
+  const cardHoverBorder = useColorModeValue("dust.300", "iron.600")
 
   const handleOpenNewTab = (e: React.MouseEvent) => {
     e.stopPropagation()
@@ -61,22 +73,16 @@ function RoverPhoto({ id, src, camera, favCb, roverName, removeBtn, onOpenLightb
     <>
       <Box
         bg={cardBg}
-        borderRadius="xl"
+        borderRadius="lg"
         overflow="hidden"
-        boxShadow={useColorModeValue(
-          "0 1px 3px rgba(0,0,0,0.1)",
-          "0 1px 3px rgba(0,0,0,0.4)"
-        )}
-        transition="transform 0.15s, box-shadow 0.15s"
+        borderWidth="1px"
+        borderColor={cardBorder}
+        transition="border-color 0.2s, transform 0.2s"
         _hover={{
+          borderColor: cardHoverBorder,
           transform: "translateY(-2px)",
-          boxShadow: useColorModeValue(
-            "0 4px 12px rgba(0,0,0,0.15)",
-            "0 4px 12px rgba(0,0,0,0.5)"
-          ),
-          "& .photo-actions": {
-            opacity: 1,
-          },
+          "& .photo-actions": { opacity: 1 },
+          "& .photo-img": { transform: "scale(1.03)" },
         }}
         position="relative"
         role="article"
@@ -84,142 +90,150 @@ function RoverPhoto({ id, src, camera, favCb, roverName, removeBtn, onOpenLightb
         cursor="pointer"
         onClick={onOpenLightbox ?? onOpen}
       >
-        <Image
-          w="100%"
-          objectFit="cover"
-          src={src}
-          alt={`Mars rover photo ${id} taken by ${camera}`}
-          sx={{ aspectRatio: "4/3" }}
-          loading="lazy"
-        />
+        <Box overflow="hidden" sx={{ aspectRatio: "4/3" }}>
+          <Image
+            className="photo-img"
+            w="100%"
+            h="100%"
+            objectFit="cover"
+            src={src}
+            alt={`Mars rover photo ${id} taken by ${camera}`}
+            loading="lazy"
+            transition="transform 0.4s cubic-bezier(0.22, 1, 0.36, 1)"
+          />
+        </Box>
 
-        {/* Camera badge overlay - top left */}
-        <Flex
-          position="absolute"
-          top={1.5}
-          left={1.5}
-          align="center"
-          gap={0.5}
-        >
-          <Badge
-            bg={overlayBg}
-            color="white"
-            fontSize={{ base: "9px", md: "xs" }}
+        {/* Top-left camera label, mono pill */}
+        <Flex position="absolute" top={2} left={2} align="center" gap={1}>
+          <Text
+            bg="rgba(13,9,7,0.7)"
+            color="dust.100"
+            fontFamily="mono"
+            fontSize="2xs"
             fontWeight="500"
+            textTransform="uppercase"
+            letterSpacing="0.08em"
             px={1.5}
             py={0.5}
             borderRadius="md"
-            maxW={{ base: "calc(100% - 12px)", md: "auto" }}
             noOfLines={1}
+            maxW={{ base: "calc(100% - 12px)", md: "none" }}
+            sx={{ backdropFilter: "blur(4px)" }}
           >
             {camera}
-          </Badge>
+          </Text>
           <IconButton
             aria-label="Camera info"
             icon={<InfoOutlineIcon boxSize={{ base: 2.5, md: 3 }} />}
             size="xs"
-            bg={overlayBg}
-            color="whiteAlpha.800"
+            bg="rgba(13,9,7,0.7)"
+            color="dust.100"
             borderRadius="md"
             minW={{ base: "18px", md: "22px" }}
             minH={{ base: "18px", md: "22px" }}
             h={{ base: "18px", md: "22px" }}
-            _hover={{ bg: "rgba(0,0,0,0.8)", color: "white" }}
+            _hover={{ bg: "rgba(13,9,7,0.9)", color: "white" }}
             onClick={handleCameraInfo}
+            sx={{ backdropFilter: "blur(4px)" }}
           />
         </Flex>
 
-        {/* Rover name badge (favorites page) */}
+        {/* Rover badge (favorites page) — top-right, mono */}
         {roverName && (
-          <Badge
+          <Text
             position="absolute"
             top={2}
-            left="auto"
-            right="auto"
-            ml="50%"
-            transform="translateX(-50%)"
+            right={2}
             bg="mars.500"
             color="white"
-            fontSize="xs"
+            fontFamily="mono"
+            fontSize="2xs"
             fontWeight="600"
-            px={2}
+            textTransform="uppercase"
+            letterSpacing="0.08em"
+            px={1.5}
             py={0.5}
             borderRadius="md"
           >
             {roverName}
-          </Badge>
+          </Text>
         )}
 
-        {/* Action bar at bottom */}
+        {/* Bottom action bar */}
         <Flex
           className="photo-actions"
           position="absolute"
           bottom={0}
           left={0}
           right={0}
-          bg={actionBarBg}
-          backdropFilter="blur(4px)"
+          bgGradient="linear(to-t, rgba(13,9,7,0.85), rgba(13,9,7,0))"
           px={2}
-          py={1}
+          pt={6}
+          pb={1.5}
           justify="space-between"
           align="center"
           opacity={{ base: 1, md: 0 }}
-          transition="opacity 0.2s"
+          transition="opacity 0.25s"
         >
-          <Badge
-            bg="transparent"
-            color="whiteAlpha.800"
-            fontSize={{ base: "9px", md: "xs" }}
-            px={0.5}
+          <Text
+            color="dust.300"
+            fontFamily="mono"
+            fontSize="2xs"
             display={{ base: "none", sm: "block" }}
+            sx={{ fontVariantNumeric: "tabular-nums" }}
           >
             #{id}
-          </Badge>
+          </Text>
 
           <Flex gap={0}>
-            {/* Expand / Fullscreen */}
             <IconButton
               aria-label={`View photo ${id} fullscreen`}
               icon={<ViewIcon boxSize={{ base: 3, md: 4 }} />}
               size="xs"
               variant="ghost"
               color="white"
-              borderRadius="full"
+              borderRadius="md"
               _hover={{ bg: "whiteAlpha.300" }}
               onClick={handleExpand}
-              minW={{ base: "28px", md: "44px" }}
-              minH={{ base: "28px", md: "44px" }}
+              minW={{ base: "28px", md: "32px" }}
+              minH={{ base: "28px", md: "32px" }}
             />
-
-            {/* Open in new tab */}
             <IconButton
               aria-label={`Open photo ${id} in new tab`}
               icon={<ExternalLinkIcon boxSize={{ base: 3, md: 4 }} />}
               size="xs"
               variant="ghost"
               color="white"
-              borderRadius="full"
+              borderRadius="md"
               _hover={{ bg: "whiteAlpha.300" }}
               onClick={handleOpenNewTab}
-              minW={{ base: "28px", md: "44px" }}
-              minH={{ base: "28px", md: "44px" }}
+              minW={{ base: "28px", md: "32px" }}
+              minH={{ base: "28px", md: "32px" }}
             />
-
-            {/* Favorite / Remove */}
             <IconButton
-              aria-label={removeBtn ? `Remove photo ${id} from favorites` : `Add photo ${id} to favorites`}
-              icon={removeBtn ? <CloseIcon boxSize={{ base: 2.5, md: 3 }} /> : <StarIcon boxSize={{ base: 3, md: 4 }} />}
+              aria-label={
+                removeBtn
+                  ? `Remove photo ${id} from favorites`
+                  : `Add photo ${id} to favorites`
+              }
+              icon={
+                removeBtn ? (
+                  <CloseIcon boxSize={{ base: 2.5, md: 3 }} />
+                ) : (
+                  <StarIcon boxSize={{ base: 3, md: 4 }} />
+                )
+              }
               size="xs"
               variant="ghost"
               color={removeBtn ? "red.300" : "yellow.300"}
-              borderRadius="full"
+              borderRadius="md"
               _hover={{
                 bg: "whiteAlpha.300",
                 color: removeBtn ? "red.400" : "yellow.400",
               }}
               onClick={handleFav}
-              minW={{ base: "28px", md: "44px" }}
-              minH={{ base: "28px", md: "44px" }}
+              minW={{ base: "28px", md: "32px" }}
+              minH={{ base: "28px", md: "32px" }}
             />
           </Flex>
         </Flex>

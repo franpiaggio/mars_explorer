@@ -14,7 +14,13 @@ import {
   PopoverBody,
   useDisclosure,
 } from "@chakra-ui/react"
-import { CalendarIcon, ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon, InfoOutlineIcon } from "@chakra-ui/icons"
+import {
+  CalendarIcon,
+  ChevronDownIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  InfoOutlineIcon,
+} from "@chakra-ui/icons"
 import { useManifest, useAvailableDates, useRovers, useRoverPhotos } from "@/queries"
 import { useFiltersContext } from "@/hooks/useFiltersContext"
 import CameraInfoModal from "@/components/CameraInfoModal/CameraInfoModal"
@@ -30,18 +36,21 @@ function Filters() {
   const { manifest, manifestEntries } = useManifest()
   const { availableDatesSet, dateToEntryMap, entries } = useAvailableDates()
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const { isOpen: isCameraInfoOpen, onOpen: onCameraInfoOpen, onClose: onCameraInfoClose } = useDisclosure()
+  const {
+    isOpen: isCameraInfoOpen,
+    onOpen: onCameraInfoOpen,
+    onClose: onCameraInfoClose,
+  } = useDisclosure()
   const { listRovers, roversLoaded } = useRovers()
   const { isRefetching } = useRoverPhotos()
 
-  const toggleBg = useColorModeValue("gray.100", "whiteAlpha.100")
-  const toggleActiveBg = useColorModeValue("white", "gray.600")
-  const triggerBg = useColorModeValue("white", "gray.700")
-  const borderColor = useColorModeValue("gray.200", "whiteAlpha.200")
-  const textSecondary = useColorModeValue("gray.500", "whiteAlpha.600")
-  const selectBg = useColorModeValue("white", "gray.700")
+  const toggleBg = useColorModeValue("dust.100", "iron.700")
+  const toggleActiveBg = useColorModeValue("white", "iron.600")
+  const selectBg = useColorModeValue("white", "iron.800")
+  const borderColor = useColorModeValue("dust.200", "iron.700")
+  const labelColor = useColorModeValue("iron.400", "dust.400")
+  const navHoverBg = useColorModeValue("dust.100", "iron.700")
 
-  // Prev/next sol navigation
   const currentIndex = useMemo(() => {
     if (state.sol == null) return -1
     return entries.findIndex((e: ManifestEntry) => e.sol === state.sol)
@@ -64,7 +73,6 @@ function Filters() {
     }
   }, [hasNext, currentIndex, entries, actions])
 
-  // Available cameras (inlined from SelectCamera)
   const availableCameras = useMemo(() => {
     if (!state.rover || state.sol == null) return []
     const entry = manifestEntries.find((e: ManifestEntry) => e.sol === state.sol)
@@ -99,33 +107,44 @@ function Filters() {
   }
 
   return (
-    <Box display={{ base: "none", md: "block" }} w="100%" role="complementary" aria-label="Photo filters">
-      <Flex align="center" justify="space-between" wrap="nowrap">
-        {/* Left arrow */}
+    <Box
+      display={{ base: "none", md: "block" }}
+      w="100%"
+      role="complementary"
+      aria-label="Photo filters"
+    >
+      <Flex align="stretch" gap={2} wrap="nowrap">
         <IconButton
           aria-label="Previous sol"
-          icon={<ChevronLeftIcon boxSize={6} />}
-          size="sm"
+          icon={<ChevronLeftIcon boxSize={5} />}
           variant="ghost"
           isDisabled={!hasPrev || !state.rover}
           onClick={goToPrev}
-          borderRadius="full"
+          h="40px"
           minW="40px"
+          borderRadius="lg"
+          color={labelColor}
+          _hover={{ bg: navHoverBg, color: "text.primary" }}
         />
 
-        {/* Center controls */}
-        <Flex gap={3} align="center" justify="center" flex={1}>
-          {/* Rover - compact dropdown */}
+        <Flex
+          flex={1}
+          align="center"
+          justify="center"
+          gap={2}
+          wrap="wrap"
+        >
           <Select
             value={state.rover?.id ?? ""}
             onChange={onSelectRover}
             disabled={!roversLoaded || isRefetching}
             size="sm"
+            h="40px"
             borderRadius="lg"
             bg={selectBg}
             borderColor={borderColor}
             w="auto"
-            minW="150px"
+            minW="160px"
             fontWeight="600"
             aria-label="Select rover"
           >
@@ -140,7 +159,6 @@ function Filters() {
                 ))}
           </Select>
 
-          {/* Date popover */}
           {state.rover && (
             <Popover
               isOpen={isOpen}
@@ -151,22 +169,23 @@ function Filters() {
             >
               <PopoverTrigger>
                 <Button
-                  size="sm"
                   variant="outline"
-                  bg={triggerBg}
+                  h="40px"
+                  bg={selectBg}
                   borderColor={borderColor}
                   borderRadius="lg"
                   rightIcon={<ChevronDownIcon />}
-                  leftIcon={<CalendarIcon boxSize={3} />}
+                  leftIcon={<CalendarIcon boxSize={3.5} />}
                   fontWeight="500"
-                  minH="32px"
                   aria-label="Select date"
                 >
                   {state.sol != null ? (
-                    <Flex align="center" gap={1.5}>
-                      <Text fontSize="sm">Sol {state.sol}</Text>
+                    <Flex align="baseline" gap={2}>
+                      <Text fontFamily="mono" fontWeight="600" fontSize="sm">
+                        Sol {state.sol}
+                      </Text>
                       {state.earth_date && (
-                        <Text fontSize="xs" color={textSecondary}>
+                        <Text fontSize="xs" color={labelColor} fontFamily="mono">
                           {state.earth_date}
                         </Text>
                       )}
@@ -176,16 +195,22 @@ function Filters() {
                   )}
                 </Button>
               </PopoverTrigger>
-              <PopoverContent w="320px" borderRadius="xl" boxShadow="lg" _focus={{ outline: "none" }}>
-                <PopoverBody p={2}>
-                  <ButtonGroup size="xs" mb={2} isAttached variant="outline" w="100%">
+              <PopoverContent
+                w="340px"
+                borderRadius="xl"
+                borderColor={borderColor}
+                bg={selectBg}
+                boxShadow="0 12px 32px rgba(0,0,0,0.25)"
+                _focus={{ outline: "none" }}
+              >
+                <PopoverBody p={2.5}>
+                  <ButtonGroup size="xs" mb={2.5} isAttached variant="outline" w="100%">
                     <Button
                       flex={1}
                       bg={dateView === "calendar" ? toggleActiveBg : toggleBg}
                       fontWeight={dateView === "calendar" ? "600" : "400"}
                       borderColor={borderColor}
                       onClick={() => setDateView("calendar")}
-                      boxShadow={dateView === "calendar" ? "sm" : "none"}
                     >
                       Calendar
                     </Button>
@@ -195,9 +220,8 @@ function Filters() {
                       fontWeight={dateView === "sol" ? "600" : "400"}
                       borderColor={borderColor}
                       onClick={() => setDateView("sol")}
-                      boxShadow={dateView === "sol" ? "sm" : "none"}
                     >
-                      Sol List
+                      Sol list
                     </Button>
                   </ButtonGroup>
 
@@ -223,7 +247,6 @@ function Filters() {
             </Popover>
           )}
 
-          {/* Camera selector */}
           {state.rover && (
             <Flex align="center" gap={1}>
               <Select
@@ -231,11 +254,12 @@ function Filters() {
                 disabled={isRefetching || availableCameras.length === 0}
                 value={state.camera ? state.camera.id : "all"}
                 size="sm"
+                h="40px"
                 borderRadius="lg"
                 bg={selectBg}
                 borderColor={borderColor}
                 w="auto"
-                maxW="260px"
+                maxW="280px"
                 aria-label="Select camera"
               >
                 <option value="all">All cameras ({availableCameras.length})</option>
@@ -255,22 +279,24 @@ function Filters() {
                   onClick={onCameraInfoOpen}
                   minW="28px"
                   minH="28px"
+                  color={labelColor}
                 />
               )}
             </Flex>
           )}
         </Flex>
 
-        {/* Right arrow */}
         <IconButton
           aria-label="Next sol"
-          icon={<ChevronRightIcon boxSize={6} />}
-          size="sm"
+          icon={<ChevronRightIcon boxSize={5} />}
           variant="ghost"
           isDisabled={!hasNext || !state.rover}
           onClick={goToNext}
-          borderRadius="full"
+          h="40px"
           minW="40px"
+          borderRadius="lg"
+          color={labelColor}
+          _hover={{ bg: navHoverBg, color: "text.primary" }}
         />
       </Flex>
 

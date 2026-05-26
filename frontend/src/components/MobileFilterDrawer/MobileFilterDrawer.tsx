@@ -29,7 +29,9 @@ function MobileFilterDrawer({ isOpen, onClose }: MobileFilterDrawerProps) {
   const { state, actions } = useFiltersContext()
   const { manifest } = useManifest()
   const { availableDatesSet, dateToEntryMap, entries } = useAvailableDates()
-  const handleBg = useColorModeValue("gray.300", "whiteAlpha.300")
+  const handleBg = useColorModeValue("dust.300", "iron.600")
+  const labelColor = useColorModeValue("iron.400", "dust.400")
+  const dividerColor = useColorModeValue("dust.200", "iron.700")
 
   const handleDateSelect = useCallback(
     (entry: ManifestEntry) => {
@@ -47,20 +49,25 @@ function MobileFilterDrawer({ isOpen, onClose }: MobileFilterDrawerProps) {
     [actions, onClose]
   )
 
-  return (
-    <Drawer
-      isOpen={isOpen}
-      placement="bottom"
-      onClose={onClose}
-      size="full"
+  const Label = ({ children }: { children: React.ReactNode }) => (
+    <Text
+      fontFamily="mono"
+      fontSize="2xs"
+      color={labelColor}
+      textTransform="uppercase"
+      letterSpacing="0.14em"
+      mb={2}
     >
+      {children}
+    </Text>
+  )
+
+  return (
+    <Drawer isOpen={isOpen} placement="bottom" onClose={onClose} size="full">
       <DrawerOverlay />
-      <DrawerContent
-        borderTopRadius="2xl"
-        maxH="85vh"
-      >
+      <DrawerContent borderTopRadius="2xl" maxH="88vh">
         <Box
-          w="40px"
+          w="36px"
           h="4px"
           bg={handleBg}
           borderRadius="full"
@@ -69,21 +76,22 @@ function MobileFilterDrawer({ isOpen, onClose }: MobileFilterDrawerProps) {
         />
         <DrawerCloseButton />
         <DrawerHeader pb={1}>
-          <Text fontSize="lg" fontWeight="700">
+          <Text fontSize="lg" fontWeight="700" letterSpacing="-0.02em">
             Filters
           </Text>
         </DrawerHeader>
 
         <DrawerBody pb={8} overflowY="auto">
-          <VStack spacing={4} align="stretch">
-            <SelectRover />
+          <VStack spacing={5} align="stretch">
+            <Box>
+              <Label>Rover</Label>
+              <SelectRover />
+            </Box>
 
-            <Divider />
+            <Divider borderColor={dividerColor} />
 
             <Box>
-              <Text fontSize="sm" fontWeight="600" mb={2}>
-                Pick a Date
-              </Text>
+              <Label>Pick a date</Label>
               <DatePicker
                 availableDatesSet={availableDatesSet}
                 dateToEntryMap={dateToEntryMap}
@@ -95,6 +103,7 @@ function MobileFilterDrawer({ isOpen, onClose }: MobileFilterDrawerProps) {
             </Box>
 
             <Box>
+              <Label>By sol</Label>
               <SolList
                 entries={entries}
                 selectedSol={state.sol ?? null}
@@ -102,9 +111,12 @@ function MobileFilterDrawer({ isOpen, onClose }: MobileFilterDrawerProps) {
               />
             </Box>
 
-            <Divider />
+            <Divider borderColor={dividerColor} />
 
-            <SelectCamera />
+            <Box>
+              <Label>Camera</Label>
+              <SelectCamera />
+            </Box>
           </VStack>
         </DrawerBody>
       </DrawerContent>

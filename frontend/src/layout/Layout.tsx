@@ -1,5 +1,5 @@
 import ErrorBoundary from "@/components/ErrorBoundary/ErrorBoundary"
-import { Box, Container } from "@chakra-ui/react"
+import { Box } from "@chakra-ui/react"
 import Header from "@/layout/Header"
 import BottomNav from "@/layout/BottomNav"
 
@@ -28,7 +28,7 @@ function Layout({ children }: Props) {
           e.currentTarget.style.height = "auto"
           e.currentTarget.style.zIndex = "9999"
           e.currentTarget.style.padding = "8px 16px"
-          e.currentTarget.style.background = "#c44a25"
+          e.currentTarget.style.background = "#c4471c"
           e.currentTarget.style.color = "white"
           e.currentTarget.style.borderRadius = "8px"
         }}
@@ -42,26 +42,20 @@ function Layout({ children }: Props) {
         Skip to content
       </a>
       <Header />
-      <Container
-        centerContent
-        maxW={{ base: "100%", xl: "80%" }}
-        minH="100vh"
-        px={{ base: 3, md: 4 }}
-        pt={{ base: 2, md: 4 }}
-        pb={{ base: "80px", md: 4 }}
+      <Box
+        id="main-content"
+        as="main"
+        role="main"
+        w="100%"
+        maxW={{ base: "100%", xl: "1320px" }}
+        mx="auto"
+        px={{ base: 4, md: 8, lg: 10 }}
+        pt={{ base: 3, md: 6 }}
+        pb={{ base: "96px", md: 14 }}
+        minH="calc(100vh - 60px)"
       >
-        <Box
-          id="main-content"
-          width="100%"
-          borderWidth={{ base: 0, md: "1px" }}
-          borderRadius={{ base: 0, md: "xl" }}
-          padding={{ base: 0, md: 5 }}
-          minH="100vh"
-          role="main"
-        >
-          <ErrorBoundary>{children}</ErrorBoundary>
-        </Box>
-      </Container>
+        <ErrorBoundary>{children}</ErrorBoundary>
+      </Box>
       <BottomNav />
     </>
   )

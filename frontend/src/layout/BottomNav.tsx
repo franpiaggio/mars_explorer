@@ -23,10 +23,10 @@ const NAV_ITEMS: NavItem[] = [
 function BottomNav() {
   const navigate = useNavigate()
   const location = useLocation()
-  const bgColor = useColorModeValue("white", "gray.800")
-  const borderColor = useColorModeValue("gray.200", "whiteAlpha.100")
-  const activeColor = useColorModeValue("mars.500", "mars.400")
-  const inactiveColor = useColorModeValue("gray.500", "whiteAlpha.500")
+  const bgColor = useColorModeValue("rgba(250,246,241,0.92)", "rgba(13,9,7,0.92)")
+  const borderColor = useColorModeValue("dust.200", "iron.700")
+  const activeColor = useColorModeValue("iron.900", "dust.50")
+  const inactiveColor = useColorModeValue("iron.400", "dust.400")
 
   return (
     <Box
@@ -43,8 +43,9 @@ function BottomNav() {
       pb="env(safe-area-inset-bottom)"
       role="navigation"
       aria-label="Main navigation"
+      sx={{ backdropFilter: "saturate(140%) blur(12px)" }}
     >
-      <Flex justify="space-around" align="center" h="56px">
+      <Flex justify="space-around" align="center" h="60px">
         {NAV_ITEMS.map((item) => {
           const isActive = location.pathname === item.path
           return (
@@ -65,11 +66,28 @@ function BottomNav() {
               role="link"
               minW="44px"
               minH="44px"
+              position="relative"
             >
               <Icon as={item.icon} boxSize={5} mb={0.5} />
-              <Text fontSize="xs" fontWeight={isActive ? "600" : "400"}>
+              <Text
+                fontSize="xs"
+                fontWeight={isActive ? "600" : "400"}
+                letterSpacing="-0.01em"
+              >
                 {item.label}
               </Text>
+              {isActive && (
+                <Box
+                  position="absolute"
+                  top={0}
+                  left="50%"
+                  transform="translateX(-50%)"
+                  w="24px"
+                  h="2px"
+                  bg="mars.500"
+                  borderRadius="0 0 2px 2px"
+                />
+              )}
             </Flex>
           )
         })}

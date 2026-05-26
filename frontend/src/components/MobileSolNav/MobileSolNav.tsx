@@ -3,7 +3,8 @@ import {
   Flex,
   IconButton,
   Text,
-  Badge,
+  Stack,
+  HStack,
   useColorModeValue,
   Box,
 } from "@chakra-ui/react"
@@ -15,9 +16,10 @@ import type { ManifestEntry } from "@/setup/types"
 function MobileSolNav() {
   const { state, actions } = useFiltersContext()
   const { entries } = useAvailableDates()
-  const bgColor = useColorModeValue("white", "gray.700")
-  const borderColor = useColorModeValue("gray.200", "whiteAlpha.100")
-  const textSecondary = useColorModeValue("gray.500", "whiteAlpha.600")
+  const bgColor = useColorModeValue("white", "iron.800")
+  const borderColor = useColorModeValue("dust.200", "iron.700")
+  const labelColor = useColorModeValue("iron.400", "dust.400")
+  const valueColor = useColorModeValue("iron.700", "dust.100")
 
   const currentIndex = useMemo(() => {
     if (state.sol == null) return -1
@@ -52,9 +54,9 @@ function MobileSolNav() {
         bg={bgColor}
         borderWidth="1px"
         borderColor={borderColor}
-        borderRadius="xl"
+        borderRadius="lg"
         px={1}
-        py={1}
+        py={1.5}
       >
         <IconButton
           aria-label="Previous sol"
@@ -63,23 +65,42 @@ function MobileSolNav() {
           variant="ghost"
           isDisabled={!hasPrev}
           onClick={goToPrev}
-          borderRadius="full"
+          borderRadius="md"
           minW="40px"
+          color={labelColor}
         />
 
-        <Flex direction="column" align="center" flex={1} minW={0}>
-          <Flex align="center" gap={2}>
-            <Text fontSize="sm" fontWeight="600">
+        <Stack spacing={0} align="center" flex={1} minW={0}>
+          <HStack spacing={2} align="baseline">
+            <Text
+              fontFamily="mono"
+              fontWeight="600"
+              fontSize="sm"
+              color={valueColor}
+              sx={{ fontVariantNumeric: "tabular-nums" }}
+            >
               Sol {currentEntry.sol}
             </Text>
-            <Badge colorScheme="orange" fontSize="10px" borderRadius="full">
-              {currentEntry.total_photos}
-            </Badge>
-          </Flex>
-          <Text fontSize="xs" color={textSecondary}>
+            <Text
+              fontFamily="mono"
+              fontSize="2xs"
+              color="mars.400"
+              fontWeight="600"
+              sx={{ fontVariantNumeric: "tabular-nums" }}
+            >
+              {currentEntry.total_photos} photos
+            </Text>
+          </HStack>
+          <Text
+            fontFamily="mono"
+            fontSize="2xs"
+            color={labelColor}
+            textTransform="uppercase"
+            letterSpacing="0.1em"
+          >
             {currentEntry.earth_date}
           </Text>
-        </Flex>
+        </Stack>
 
         <IconButton
           aria-label="Next sol"
@@ -88,8 +109,9 @@ function MobileSolNav() {
           variant="ghost"
           isDisabled={!hasNext}
           onClick={goToNext}
-          borderRadius="full"
+          borderRadius="md"
           minW="40px"
+          color={labelColor}
         />
       </Flex>
     </Box>

@@ -1,22 +1,15 @@
 import {
   Heading,
   Box,
-  Icon,
   Text,
   HStack,
   VStack,
-  SimpleGrid,
-  Badge,
   Flex,
+  Wrap,
+  WrapItem,
+  Link,
   useColorModeValue,
-  Divider,
 } from "@chakra-ui/react"
-import {
-  CheckIcon,
-  ExternalLinkIcon,
-  InfoIcon,
-  StarIcon,
-} from "@chakra-ui/icons"
 import { Layout } from "@/layout"
 import { Suspense, lazy } from "react"
 
@@ -28,271 +21,406 @@ const ROVERS = [
   {
     name: "Curiosity",
     status: "active",
-    landingSite: "Gale Crater",
-    description:
-      "The largest and most capable rover sent to Mars. Equipped with 17 cameras, it has traveled over 30 km exploring evidence of water and past habitable conditions.",
+    landed: "2012",
+    site: "Gale Crater",
     cameras: 17,
-  },
-  {
-    name: "Opportunity",
-    status: "complete",
-    landingSite: "Meridiani Planum",
     description:
-      "Designed for 90 days, it operated for nearly 15 years. It traveled 45 km, a record for off-Earth vehicles, until a global dust storm ended its mission in 2018.",
-    cameras: 9,
-  },
-  {
-    name: "Spirit",
-    status: "complete",
-    landingSite: "Gusev Crater",
-    description:
-      "Opportunity's twin. Found evidence of ancient hot springs and volcanic activity. Operated for 6 years until it became stuck in soft soil in 2009.",
-    cameras: 9,
+      "The largest rover ever sent to Mars. Has driven 30+ km searching for evidence of past habitable environments.",
   },
   {
     name: "Perseverance",
     status: "active",
-    landingSite: "Jezero Crater",
-    description:
-      "NASA's most advanced rover. Searching for signs of ancient microbial life, collecting rock samples, and carrying Ingenuity, the first helicopter to fly on another planet.",
+    landed: "2021",
+    site: "Jezero Crater",
     cameras: 23,
+    description:
+      "NASA's most advanced rover. Caching rock samples for a future return mission. Carried Ingenuity, the first helicopter to fly on another planet.",
+  },
+  {
+    name: "Opportunity",
+    status: "complete",
+    landed: "2004",
+    site: "Meridiani Planum",
+    cameras: 9,
+    description:
+      "Designed for 90 days, lasted nearly 15 years. Traveled 45 km — a record for off-Earth vehicles — until a global dust storm ended its mission in 2018.",
+  },
+  {
+    name: "Spirit",
+    status: "complete",
+    landed: "2004",
+    site: "Gusev Crater",
+    cameras: 9,
+    description:
+      "Opportunity's twin. Found evidence of ancient hot springs and volcanic activity before becoming stuck in soft soil in 2009.",
   },
 ]
 
-const TECH_STACK = [
-  "Vite + React + TypeScript",
-  "React Query (TanStack)",
-  "Vitest + React Testing Library",
-  "React Router v6",
-  "Chakra UI",
-  "ESLint + Prettier",
-  "Rails API Backend",
-  "Docker Compose",
+const STACK = [
+  { label: "Frontend", value: "React 18 · TypeScript · Vite · Chakra UI" },
+  { label: "Data", value: "React Query · React Router · localForage" },
+  { label: "3D", value: "Three.js · @react-three/fiber · @react-three/drei" },
+  { label: "Backend", value: "Rails 8 · PostgreSQL · Redis · Puma" },
+  { label: "Infra", value: "Docker Compose · Nginx · Coolify" },
+  { label: "Tests", value: "Vitest · React Testing Library" },
 ]
 
-const NASA_API_ENDPOINTS = [
+const ENDPOINTS = [
   {
-    name: "Mars Rover Photos",
+    method: "GET",
     path: "/mars-photos/api/v1/rovers/{rover}/photos",
-    description:
-      "Real photos taken by the rovers, filterable by Martian sol, Earth date, and camera.",
+    note: "Filterable by Martian sol, Earth date, and camera.",
   },
   {
-    name: "Rover Manifest",
+    method: "GET",
     path: "/mars-photos/api/v1/manifests/{rover}",
-    description:
-      "Mission information: total photos, date range, and operational status of the rover.",
+    note: "Mission manifest — date range, totals, operational status.",
   },
 ]
 
-function SectionCard({ children }: { children: React.ReactNode }) {
-  const bg = useColorModeValue("white", "gray.800")
-  const border = useColorModeValue("gray.100", "gray.700")
-
+function Eyebrow({ children }: { children: React.ReactNode }) {
+  const color = useColorModeValue("iron.400", "dust.400")
   return (
-    <Box
-      bg={bg}
-      borderWidth="1px"
-      borderColor={border}
-      borderRadius="2xl"
-      p={{ base: 5, md: 7 }}
-      shadow="sm"
+    <Text
+      fontFamily="mono"
+      fontSize="2xs"
+      color={color}
+      textTransform="uppercase"
+      letterSpacing="0.18em"
     >
       {children}
-    </Box>
+    </Text>
   )
 }
 
 function About() {
-  const accentColor = useColorModeValue("mars.500", "mars.400")
-  const subtitleColor = useColorModeValue("gray.600", "whiteAlpha.700")
-  const mutedColor = useColorModeValue("gray.500", "whiteAlpha.600")
-  const labelColor = useColorModeValue("gray.500", "whiteAlpha.500")
-  const checkBg = useColorModeValue("mars.50", "rgba(217, 90, 50, 0.15)")
-  const codeBg = useColorModeValue("gray.100", "whiteAlpha.100")
-  const codeColor = useColorModeValue("mars.600", "mars.300")
-  const roverCardBg = useColorModeValue("gray.50", "gray.750")
-  const roverCardBorder = useColorModeValue("gray.200", "gray.600")
+  const accentColor = useColorModeValue("mars.600", "mars.400")
+  const subtitleColor = useColorModeValue("iron.500", "dust.200")
+  const mutedColor = useColorModeValue("iron.400", "dust.400")
+  const ruleColor = useColorModeValue("dust.200", "iron.700")
+  const codeBg = useColorModeValue("dust.100", "iron.800")
+  const codeColor = useColorModeValue("iron.700", "dust.100")
+  const dotInactive = useColorModeValue("iron.300", "iron.600")
+  const valueColor = useColorModeValue("iron.700", "dust.100")
+  const linkUnderline = useColorModeValue("dust.300", "iron.600")
 
   return (
     <Layout>
-      <Box
-        pt={{ base: 4, md: 8 }}
-        pb={{ base: 8, md: 12 }}
-        px={{ base: 2, md: 4 }}
-        maxW="3xl"
-        mx="auto"
-      >
-        <VStack spacing={{ base: 6, md: 8 }} align="stretch">
-          {/* Hero */}
-          <Box textAlign="center" py={{ base: 4, md: 6 }}>
-            <Suspense
-              fallback={
-                <Text fontSize={{ base: "4xl", md: "5xl" }} mb={3} lineHeight={1}>
-                  🔴
-                </Text>
-              }
+      <Box maxW="980px" mx="auto" pt={{ base: 2, md: 8 }}>
+        {/* Hero — asymmetric: title block left, 3D Mars right */}
+        <Flex
+          direction={{ base: "column", lg: "row" }}
+          align={{ base: "stretch", lg: "center" }}
+          gap={{ base: 6, lg: 10 }}
+          pb={{ base: 10, md: 14 }}
+        >
+          <Box flex="1.4" order={{ base: 2, lg: 1 }}>
+            <Eyebrow>About this project</Eyebrow>
+            <Heading
+              as="h1"
+              fontSize={{ base: "4xl", md: "6xl", lg: "7xl" }}
+              fontWeight="700"
+              letterSpacing="-0.04em"
+              lineHeight="0.95"
+              mt={3}
+              mb={6}
             >
-              <Mars3D />
-            </Suspense>
-            <Heading size={{ base: "lg", md: "xl" }} mb={3}>
-              Mars Explorer
+              A quiet window
+              <Box as="span" display="block" color={accentColor}>
+                onto Mars.
+              </Box>
             </Heading>
             <Text
-              color={subtitleColor}
               fontSize={{ base: "md", md: "lg" }}
-              maxW="xl"
-              mx="auto"
-              lineHeight="tall"
+              color={subtitleColor}
+              maxW="48ch"
+              lineHeight="1.55"
             >
-              Browse real photos taken by NASA's rovers on the surface of Mars.
-              Filter by rover, camera, Martian sol, or Earth date, and save your
-              favorites.
+              Real photos taken by NASA's rovers on the surface of another
+              planet. Browse by rover, by Martian sol, by camera. Self-hosted, so
+              the archive doesn't disappear when an API does.
             </Text>
           </Box>
+          <Box
+            flex="1"
+            order={{ base: 1, lg: 2 }}
+            display="flex"
+            justifyContent={{ base: "center", lg: "flex-end" }}
+          >
+            <Suspense fallback={<Box w="280px" h="280px" />}>
+              <Mars3D />
+            </Suspense>
+          </Box>
+        </Flex>
 
-          {/* Rovers */}
-          <SectionCard>
-            <HStack spacing={2} mb={1}>
-              <Icon as={StarIcon} color={accentColor} boxSize={4} />
-              <Heading size="md">The Rovers</Heading>
-            </HStack>
-            <Text color={subtitleColor} mb={5} fontSize="sm">
-              Four robotic vehicles that have explored Mars with high-resolution
-              scientific cameras.
-            </Text>
-
-            <SimpleGrid columns={{ base: 1, md: 2 }} spacing={4}>
-              {ROVERS.map((rover) => (
-                <Box
-                  key={rover.name}
-                  p={4}
-                  borderRadius="xl"
-                  bg={roverCardBg}
-                  borderWidth="1px"
-                  borderColor={roverCardBorder}
+        {/* Story */}
+        <Box
+          borderTopWidth="1px"
+          borderColor={ruleColor}
+          py={{ base: 10, md: 14 }}
+        >
+          <Flex direction={{ base: "column", md: "row" }} gap={{ base: 4, md: 12 }}>
+            <Box w={{ base: "auto", md: "180px" }} flexShrink={0}>
+              <Eyebrow>The story</Eyebrow>
+            </Box>
+            <Box flex="1" maxW="60ch">
+              <Text fontSize={{ base: "md", md: "lg" }} mb={4} lineHeight="1.65">
+                I built the original frontend years ago as a coding challenge
+                against NASA's public Mars Rover Photos API. I kept coming back
+                to browse the photos — there's something about seeing what
+                another planet looks like through a rover's camera that I never
+                got tired of.
+              </Text>
+              <Text fontSize={{ base: "md", md: "lg" }} color={subtitleColor} lineHeight="1.65">
+                When the API was archived in 2025, I forked the{" "}
+                <Link
+                  href="https://github.com/corincerami/mars-photo-api"
+                  isExternal
+                  color={accentColor}
+                  borderBottomWidth="1px"
+                  borderColor={linkUnderline}
+                  _hover={{ borderColor: accentColor }}
                 >
-                  <Flex justify="space-between" align="center" mb={2}>
-                    <Heading size="sm">{rover.name}</Heading>
-                    <Badge
-                      colorScheme={rover.status === "active" ? "green" : "gray"}
-                      borderRadius="full"
-                      px={2}
-                      fontSize="xs"
-                    >
-                      {rover.status === "active" ? "Active" : "Completed"}
-                    </Badge>
-                  </Flex>
-                  <Text fontSize="sm" color={subtitleColor} mb={3}>
-                    {rover.description}
-                  </Text>
-                  <HStack spacing={4} fontSize="xs" color={labelColor}>
-                    <Text>📍 {rover.landingSite}</Text>
-                    <Text>📷 {rover.cameras} cameras</Text>
-                  </HStack>
-                </Box>
-              ))}
-            </SimpleGrid>
-          </SectionCard>
+                  original Rails backend
+                </Link>{" "}
+                by Corin Cerami and turned it into a self-hosted monorepo so I
+                could keep it running on my own infrastructure.
+              </Text>
+            </Box>
+          </Flex>
+        </Box>
 
-          {/* NASA API */}
-          <SectionCard>
-            <HStack spacing={2} mb={1}>
-              <Icon as={ExternalLinkIcon} color={accentColor} boxSize={4} />
-              <Heading size="md">NASA Mars Photos API</Heading>
-            </HStack>
-            <Text color={subtitleColor} mb={5} fontSize="sm">
-              The backend is a fork of{" "}
-              <Text as="span" color={accentColor} fontWeight={600}>
-                chris-greening/mars-rover-photos-api
-              </Text>
-              , a Rails API with scrapers that fetch and cache data from NASA's
-              free public API. You can get your own API key at{" "}
-              <Text as="span" color={accentColor} fontWeight={600}>
-                api.nasa.gov
-              </Text>
-              . The main endpoints we use:
+        {/* Rovers — list, not card grid */}
+        <Box
+          borderTopWidth="1px"
+          borderColor={ruleColor}
+          py={{ base: 10, md: 14 }}
+        >
+          <Flex direction={{ base: "column", md: "row" }} gap={{ base: 4, md: 12 }} mb={{ base: 6, md: 10 }}>
+            <Box w={{ base: "auto", md: "180px" }} flexShrink={0}>
+              <Eyebrow>The rovers</Eyebrow>
+            </Box>
+            <Text flex="1" maxW="60ch" fontSize={{ base: "md", md: "lg" }} color={subtitleColor}>
+              Four robotic vehicles. Two still working, two completed. All of
+              them carry scientific cameras whose images you can browse here.
             </Text>
+          </Flex>
 
-            <VStack spacing={3} align="stretch">
-              {NASA_API_ENDPOINTS.map((ep) => (
-                <Box key={ep.name}>
-                  <Text fontWeight={600} fontSize="sm" mb={1}>
-                    {ep.name}
-                  </Text>
-                  <Box
-                    bg={codeBg}
-                    px={3}
-                    py={1.5}
-                    borderRadius="lg"
-                    mb={1.5}
-                    overflowX="auto"
+          <VStack
+            align="stretch"
+            spacing={0}
+            divider={<Box borderTopWidth="1px" borderColor={ruleColor} />}
+          >
+            {ROVERS.map((rover) => (
+              <Flex
+                key={rover.name}
+                py={6}
+                gap={{ base: 4, md: 8 }}
+                direction={{ base: "column", md: "row" }}
+                align={{ base: "stretch", md: "baseline" }}
+              >
+                <Box w={{ base: "auto", md: "180px" }} flexShrink={0}>
+                  <Heading
+                    as="h3"
+                    size="lg"
+                    fontWeight="600"
+                    letterSpacing="-0.02em"
                   >
+                    {rover.name}
+                  </Heading>
+                  <HStack spacing={2} mt={1.5}>
+                    <Box
+                      w="6px"
+                      h="6px"
+                      borderRadius="full"
+                      bg={rover.status === "active" ? "green.400" : dotInactive}
+                    />
                     <Text
                       fontFamily="mono"
                       fontSize="xs"
-                      color={codeColor}
-                      whiteSpace="nowrap"
+                      color={mutedColor}
+                      textTransform="uppercase"
+                      letterSpacing="0.1em"
                     >
-                      GET {ep.path}
+                      {rover.status === "active" ? "Active" : "Complete"} · {rover.landed}
                     </Text>
-                  </Box>
-                  <Text fontSize="sm" color={mutedColor}>
-                    {ep.description}
+                  </HStack>
+                </Box>
+                <Box flex="1">
+                  <Text fontSize="md" mb={2} maxW="60ch" lineHeight="1.6">
+                    {rover.description}
+                  </Text>
+                  <HStack
+                    spacing={4}
+                    fontFamily="mono"
+                    fontSize="xs"
+                    color={mutedColor}
+                    textTransform="uppercase"
+                    letterSpacing="0.1em"
+                    flexWrap="wrap"
+                  >
+                    <Text>{rover.site}</Text>
+                    <Text>·</Text>
+                    <Text>{rover.cameras} cameras</Text>
+                  </HStack>
+                </Box>
+              </Flex>
+            ))}
+          </VStack>
+        </Box>
+
+        {/* API */}
+        <Box
+          borderTopWidth="1px"
+          borderColor={ruleColor}
+          py={{ base: 10, md: 14 }}
+        >
+          <Flex direction={{ base: "column", md: "row" }} gap={{ base: 4, md: 12 }} mb={6}>
+            <Box w={{ base: "auto", md: "180px" }} flexShrink={0}>
+              <Eyebrow>The data source</Eyebrow>
+            </Box>
+            <Box flex="1" maxW="60ch">
+              <Text fontSize={{ base: "md", md: "lg" }} mb={3} color={valueColor}>
+                NASA Mars Photos API
+              </Text>
+              <Text fontSize="md" color={subtitleColor} lineHeight="1.65">
+                The Rails backend acts as a cache and proxy in front of NASA's
+                free public API. Up to 1,000 requests per hour with your own key
+                from{" "}
+                <Link
+                  href="https://api.nasa.gov"
+                  isExternal
+                  color={accentColor}
+                  borderBottomWidth="1px"
+                  borderColor={linkUnderline}
+                  _hover={{ borderColor: accentColor }}
+                >
+                  api.nasa.gov
+                </Link>
+                . Two endpoints carry the weight.
+              </Text>
+            </Box>
+          </Flex>
+
+          <VStack
+            align="stretch"
+            spacing={3}
+            ml={{ base: 0, md: "180px" }}
+            pl={{ base: 0, md: 12 }}
+          >
+            {ENDPOINTS.map((ep) => (
+              <Box key={ep.path}>
+                <Box
+                  bg={codeBg}
+                  px={4}
+                  py={3}
+                  borderRadius="lg"
+                  overflowX="auto"
+                >
+                  <Text
+                    fontFamily="mono"
+                    fontSize="sm"
+                    color={codeColor}
+                    whiteSpace="nowrap"
+                  >
+                    <Box as="span" color={accentColor} fontWeight="600" mr={2}>
+                      {ep.method}
+                    </Box>
+                    {ep.path}
                   </Text>
                 </Box>
-              ))}
-            </VStack>
+                <Text fontSize="sm" color={mutedColor} mt={1.5} pl={1}>
+                  {ep.note}
+                </Text>
+              </Box>
+            ))}
+          </VStack>
+        </Box>
 
-            <Divider my={4} />
-
-            <HStack spacing={2}>
-              <Icon as={InfoIcon} color={mutedColor} boxSize={3} />
-              <Text fontSize="xs" color={mutedColor}>
-                The API allows up to 1,000 requests per hour with a free key.
-                This project uses a Rails backend as a proxy to cache responses
-                and protect your API key.
-              </Text>
-            </HStack>
-          </SectionCard>
-
-          {/* Tech Stack */}
-          <SectionCard>
-            <HStack spacing={2} mb={1}>
-              <Icon as={CheckIcon} color={accentColor} boxSize={4} />
-              <Heading size="md">Tech Stack</Heading>
-            </HStack>
-            <Text color={subtitleColor} mb={5} fontSize="sm">
-              Technologies used in this project.
-            </Text>
-            <SimpleGrid columns={{ base: 1, sm: 2 }} spacing={2}>
-              {TECH_STACK.map((item) => (
-                <HStack key={item} spacing={3}>
-                  <Box
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center"
-                    w={5}
-                    h={5}
-                    borderRadius="full"
-                    bg={checkBg}
+        {/* Stack */}
+        <Box
+          borderTopWidth="1px"
+          borderColor={ruleColor}
+          py={{ base: 10, md: 14 }}
+        >
+          <Flex direction={{ base: "column", md: "row" }} gap={{ base: 4, md: 12 }}>
+            <Box w={{ base: "auto", md: "180px" }} flexShrink={0}>
+              <Eyebrow>Built with</Eyebrow>
+            </Box>
+            <VStack
+              flex="1"
+              align="stretch"
+              spacing={0}
+              divider={<Box borderTopWidth="1px" borderColor={ruleColor} />}
+            >
+              {STACK.map((row) => (
+                <Flex
+                  key={row.label}
+                  py={3.5}
+                  direction={{ base: "column", sm: "row" }}
+                  align={{ base: "stretch", sm: "baseline" }}
+                  gap={{ base: 1, sm: 6 }}
+                >
+                  <Text
+                    w={{ base: "auto", sm: "120px" }}
+                    fontFamily="mono"
+                    fontSize="xs"
+                    color={mutedColor}
+                    textTransform="uppercase"
+                    letterSpacing="0.1em"
                     flexShrink={0}
                   >
-                    <Icon as={CheckIcon} boxSize={2.5} color={accentColor} />
-                  </Box>
-                  <Text fontSize="sm" fontWeight={500}>
-                    {item}
+                    {row.label}
                   </Text>
-                </HStack>
+                  <Text fontSize="md" color={valueColor}>
+                    {row.value}
+                  </Text>
+                </Flex>
               ))}
-            </SimpleGrid>
-          </SectionCard>
+            </VStack>
+          </Flex>
+        </Box>
 
-          {/* Footer note */}
-          <Text textAlign="center" fontSize="xs" color={mutedColor} pt={2}>
-            Built with open data from NASA Open APIs
-          </Text>
-        </VStack>
+        {/* Footer */}
+        <Box
+          borderTopWidth="1px"
+          borderColor={ruleColor}
+          pt={8}
+          pb={{ base: 4, md: 8 }}
+          mt={4}
+        >
+          <Wrap spacing={4} justify="space-between" align="center">
+            <WrapItem>
+              <Text fontFamily="mono" fontSize="xs" color={mutedColor} textTransform="uppercase" letterSpacing="0.12em">
+                Mars rover photo data · NASA / JPL-Caltech
+              </Text>
+            </WrapItem>
+            <WrapItem>
+              <HStack spacing={5} fontFamily="mono" fontSize="xs">
+                <Link
+                  href="https://github.com/franpiaggio/mars_explorer"
+                  isExternal
+                  color={mutedColor}
+                  _hover={{ color: accentColor }}
+                  textTransform="uppercase"
+                  letterSpacing="0.12em"
+                >
+                  Source on GitHub
+                </Link>
+                <Link
+                  href="https://api.nasa.gov"
+                  isExternal
+                  color={mutedColor}
+                  _hover={{ color: accentColor }}
+                  textTransform="uppercase"
+                  letterSpacing="0.12em"
+                >
+                  NASA Open APIs
+                </Link>
+              </HStack>
+            </WrapItem>
+          </Wrap>
+        </Box>
       </Box>
     </Layout>
   )

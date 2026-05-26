@@ -1,36 +1,77 @@
-import { Box, Heading, Text, Button } from "@chakra-ui/react"
+import { Box, Heading, Text, Button, Stack, useColorModeValue } from "@chakra-ui/react"
 import { Link } from "react-router-dom"
 import { Layout } from "@/layout"
 
 function NotFound() {
+  const accentColor = useColorModeValue("mars.600", "mars.400")
+  const subtitleColor = useColorModeValue("iron.500", "dust.200")
+  const labelColor = useColorModeValue("iron.400", "dust.400")
+
   return (
     <Layout>
-      <Box textAlign="center" py={16} px={6}>
+      <Box
+        maxW="540px"
+        mx="auto"
+        py={{ base: 16, md: 24 }}
+        textAlign="center"
+      >
+        <Text
+          fontFamily="mono"
+          fontSize="2xs"
+          color={labelColor}
+          textTransform="uppercase"
+          letterSpacing="0.2em"
+          mb={4}
+        >
+          Signal lost
+        </Text>
         <Heading
-          display="inline-block"
-          as="h2"
-          size="2xl"
-          bgGradient="linear(to-r, mars.400, mars.600)"
-          backgroundClip="text"
+          as="h1"
+          fontSize={{ base: "6xl", md: "7xl" }}
+          fontWeight="700"
+          color={accentColor}
+          letterSpacing="-0.05em"
+          lineHeight="0.9"
+          mb={3}
+          sx={{ fontVariantNumeric: "tabular-nums" }}
         >
           404
         </Heading>
-        <Text fontSize="lg" mt={3} mb={2}>
-          Page Not Found
-        </Text>
-        <Text color="gray.500" mb={6}>
-          The page you're looking for does not seem to exist
-        </Text>
-        <Button
-          as={Link}
-          to="/"
-          bg="mars.500"
-          color="white"
-          _hover={{ bg: "mars.600" }}
-          borderRadius="xl"
+        <Text
+          fontSize={{ base: "lg", md: "xl" }}
+          fontWeight="600"
+          letterSpacing="-0.02em"
+          mb={2}
         >
-          Go to Home
-        </Button>
+          This page is somewhere on Mars.
+        </Text>
+        <Text fontSize="md" color={subtitleColor} mb={8}>
+          The address you tried doesn't resolve to anything in this archive.
+          Head back to the surface.
+        </Text>
+        <Stack direction={{ base: "column", sm: "row" }} spacing={3} justify="center">
+          <Button
+            as={Link}
+            to="/"
+            variant="mars"
+            size="md"
+            h="44px"
+            px={6}
+          >
+            Back to Explore
+          </Button>
+          <Button
+            as={Link}
+            to="/about"
+            variant="outline"
+            size="md"
+            h="44px"
+            px={6}
+            fontWeight="500"
+          >
+            About the project
+          </Button>
+        </Stack>
       </Box>
     </Layout>
   )
